@@ -1,0 +1,66 @@
+package data;
+
+import java.io.PrintStream;
+
+public class CurrentDataContainerValue implements ReferenceValue {
+	public static final String[] VALUE_TYPE_NAMES = {"currentEnvironment","current","local"};
+
+	public String getTypeName() {
+		return VALUE_TYPE_NAMES[0];
+	}
+	
+	public String[] getAlternativeTypeNames() {
+		return VALUE_TYPE_NAMES;
+	}
+
+	@Override
+	public Value copy() {
+		return new CurrentDataContainerValue();
+	}
+
+	@Override
+	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.evaluate(environment, args, output);
+	}
+
+	@Override
+	public Value getReferencedValue(DataContainer environment) throws DataException {
+		return environment;
+	}
+
+	@Override
+	public Path getReferencedPath(DataContainer environment) throws DataException {
+		return environment.getPath();
+	}
+
+	public String toString(){
+		return "%";
+	}
+
+	@Override
+	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
+		return environment.getLevelAbove();
+	}
+
+	@Override
+	public int compareTo(Value o) {
+		if(o instanceof CurrentDataContainerValue) return 0;
+		return getTypeName().compareTo(o.getTypeName());
+	}
+
+	@Override
+	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
+		return environment.getHost();
+	}
+
+	@Override
+	public Value replaceArgumentsBy(Value[] args) {
+		return copy();
+	}
+
+	@Override
+	public boolean equals(Value other) {
+		return other instanceof CurrentDataContainerValue;
+	}
+}

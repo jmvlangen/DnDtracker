@@ -1,0 +1,7 @@
+<collection:x>(
+    <integer:y>(7)
+    <function:z>(y * 2)
+    <collection:set>(
+        <integer:a>(1)
+        <integer:b>(2)
+        <reference:c>(:x.y)))

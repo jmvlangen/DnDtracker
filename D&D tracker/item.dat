@@ -1,0 +1,7 @@
+collection(
+    _value:variable( print((name+if(magical," (magical)")),("value: "+value),description) )
+    _type:variable( "item" )
+    magical:variable( $FALSE )
+    description:variable( "<no description>" )
+    value:variable( "unknown" )
+)
