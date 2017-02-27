@@ -180,4 +180,151 @@ name. When such a value is evaluated it will thus try to find a variable with th
 name and evaluate the value stored in that variable. If a variable with that name can
 not be found an error will be presented.
 
-...
+---b) Collections-----------------------------------------------------------------------
+A collection is a value that can store variables. A collection is represented by a
+comma seperated list enclosed in curly brackets (the symbols { and } ). Each entry in
+this list consists of a valid name, the symbol = and then a value. An example of a list.
+An example of such a collection would for example be
+	{ a = 2 , b = "text"}
+
+A collection is in fact a primitive type and will thus result in itself when evaluated.
+The operators defined in section 1.b) will present the user with errors if they are
+evaluated on collections. Special behavior for these operators and evaluation can
+however be defined. Section ... will describe this in detail.
+
+---c) Nested variables------------------------------------------------------------------
+In order to access variables within a collection one can use the symbol . . If Col is
+any expression that represents a collection, evaluates to a collection or is the name
+of a variable with as value a collection, then adding the symbol . followed by a name
+will represent the value of a variable with that name in the before mentioned
+collection. Hence
+	Col.name
+will refer to the value of the variable name inside the collection reffered to by Col.
+
+Examples of this usage would include
+	{ a = 3 }.a
+	x.y
+where x is the name of a variable with as value a collection, or
+	({b = "hello world"} + ()).b
+as the part before the dot will evaluate to the collection
+	{b = "hello world"}
+	
+One could also combine multiple usages of the symbol . . For example
+	a.b.c
+will acces the value of the variable named c inside the collection stored in the
+variable named b inside the collection stored under the name a. One could think as this
+as the variable named c being two levels below the variable named a. One could therefore
+interpret the symbol . as going down one level.
+
+Besides going down a level, one could also go up one or multiple levels by adding
+additional symbols . . For example
+	{a = {}, b = 3}.a..b
+will evaluate to
+	3
+In this case
+	a..b
+means the program will look for the variable named b in the collection that contains
+the variable named b, hence one level above the variable named a. Multiple uses of the
+symbol . would go up more levels. For example
+	a....c
+will look for a variable named c in a collection three levels above the variable named
+a. In general n+1 uses of the symbol . in a row will result in looking for a variable
+at level n above whatever is in front of the first symbol . . This generalizes to the
+case where n is 0, at which case it will look for a variable inside the collection
+referred to before the first symbol . , hence at level 0. A last remark about levels
+is that there is always a top level collection and going up levels from there will
+always end again in this top level collection.
+
+Besides user created collections, the program also stores a special collection. This
+collection will be referred to as the global collection and is represented by the
+symbol : . Variables in this collection could be accessed using the method described
+above, but when accesing variables in the global collection one can leave out the
+symbol . . For example
+	:.b
+accesses the variable named b in the global collection, but
+	:b
+does as well. Note that any variables will only be stored when they are at some level
+below the global collection, but will only be stored as long as the program is running.
+To save variables between sessions look at ...
+
+Besides the global collection the program also keeps track of a current collection,
+which is called the environment. By default this environment is set to be the global
+collection, but it can be changed (see section ...). When names of variables are typed
+without the symbol . in front, the program looks for these variables inside this
+collection. One can also write the symbol . without any value in front, in which case
+it will link to variables relative to the environment. For example
+	..b
+will look for a variable named b in the collection above the environment.
+
+A last remark about the symbol . is that it can also be followed by a value surrounded
+by brackets, i.e. the symbols ( and ) . In this case this value will be calculated
+inside the level the symbols . refer to. For example
+	..( a + b )
+will evaluate
+	a + b
+inside the collection above the environment, meaning that when the addition evaluates
+the variables named a and b it will look for these variables in that collection. The
+same will happen when evaluating any value inside a variable. For example
+	..c
+where the variable named c in the collection above the environment has value
+	a + b
+this will evaluate in the same way as the first example.
+
+---d) Paths-----------------------------------------------------------------------------
+Throughout the following sections we will talk about certain values, which we shall
+call paths. Paths are values consisting of only names of variables seperated by
+(multiple) symbols . . A path may also start with the symbol : if so required. For all
+practical purposes a path will always refer to some variable on some level below the
+global collection.
+
+--4) Arguments--------------------------------------------------------------------------
+When evaluating values it is possible to pass it other values as arguments. The main
+application of this is given by system commands (see section 5). A value to be evaluated
+with arguments is represented by the value followed by a comma seperated sequence of
+values surrounded by brackets, i.e. the symbols ( and ) . For example, when
+	coolStuff( a , 3 , "Just do it")
+is evaluated, it will evaluated the value coolStuff with arguments
+	a
+	3
+and
+	"Just do it"
+	
+Note that the implementation of arguments is now limited to two cases: arguments passed
+to variables with the symbol ( directly after the name, and arguments on the input line.
+In the latter case brackets and comma's are left out. From a list of values on the
+command line the first will be taken as the value to be evaluated and the rest will be
+taken as the arguments for evaluation.
+
+---a) Argument values-------------------------------------------------------------------
+A special type of value exists that is closely linked to arguments, called the argument
+value. An argument value is represented by the symbol # followed by a (strictly)
+positive integer value, which we will call n. When evaluated an argument value will
+instead evaluate the n'th argument given when evaluated. When this argument does not
+exist it will evaluate to a void value.
+
+--5) System Commands--------------------------------------------------------------------
+Inside the global collection there are some special variables known as system commands.
+These variables can not be modified in any way and store specific values that perform
+certain special actions when being evaluated. This section explains what these system
+commands do. In each subsection we will name the command after the name of the
+corresponding variable inside the global collection.
+
+---a) Create----------------------------------------------------------------------------
+The create command creates a variable or path of variables. When evaluating the create
+command needs at least one argument, which should be a path (see section 3d). When
+evaluated the create command will attempt to create all named variables in this path at
+their appropiate level (see section 3c). When a second argument is given, the value of
+the last named variable in the path will be set to the value given as a second argument.
+
+---b) Set-------------------------------------------------------------------------------
+The set command can be used to set the value of a variable. The command requires two
+arguments. The first should be a path (see section 3d), which refers to a variable
+(which may not yet exist). The second should be a value which should become the value
+of the afore mentioned variable. When evaluated the set command will create the given
+path (like the create command) and set the value of the last variable in the path to
+the second argument.
+
+---c) Remove----------------------------------------------------------------------------
+The remove command removes a variable. The remove command requires a single argument
+that should be a path. The variable linked to the last name in this path will be removed
+when the remove command is evaluated.
