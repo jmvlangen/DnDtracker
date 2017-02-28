@@ -43,11 +43,11 @@ of such an operation is not an integer in the afore mentioned range. Division of
 integer 'x' by an integer 'y' will result in the largest integer 'z' such that 'y' times
 'z' is at most 'x'.
 
-----iii) Strings------------------------------------------------------------------------
-A string is a value that represents a text. Strings will be represented by the
-characters inside the string (in the right order) preceded and succeeded by the symbol "
-Furthermore certain characters in the string will be replaced by a different combination
-of two characters as follows
+----iii) Texts--------------------------------------------------------------------------
+A text is a value that represents a text. Texts will be represented by the characters
+inside the text (in the right order) preceded and succeeded by the symbol " Furthermore
+certain characters in the string will be replaced by a different combination of two
+characters as follows
 	" will be represented by \"
 	\ will be represented by \\
 	the newline characters will be represented by \n
@@ -55,7 +55,7 @@ Note that the symbol \ succeeded by another symbol in the representation will al
 result in the succeeding symbol in the string if it is not one of the cases described
 above. Hence the only way to get \ in the string is to have \\ in the representation.
 
-The only operation that works on strings is addition, which just concatenates strings.
+The only operation that works on texts is addition, which just concatenates texts.
 
 ---b) Basic Operations------------------------------------------------------------------
 Besides primitive values there are certain operations which combine multiple values
@@ -307,16 +307,19 @@ Inside the global collection there are some special variables known as system co
 These variables can not be modified in any way and store specific values that perform
 certain special actions when being evaluated. This section explains what these system
 commands do. In each subsection we will name the command after the name of the
-corresponding variable inside the global collection.
+corresponding variable inside the global collection. Note that each command will
+evaluate to a void value unless otherwise mentioned.
 
----a) Create----------------------------------------------------------------------------
+---a) Variable manipulation commands----------------------------------------------------
+
+----i) Create---------------------------------------------------------------------------
 The create command creates a variable or path of variables. When evaluating the create
 command needs at least one argument, which should be a path (see section 3d). When
 evaluated the create command will attempt to create all named variables in this path at
 their appropiate level (see section 3c). When a second argument is given, the value of
 the last named variable in the path will be set to the value given as a second argument.
 
----b) Set-------------------------------------------------------------------------------
+----ii) Set-----------------------------------------------------------------------------
 The set command can be used to set the value of a variable. The command requires two
 arguments. The first should be a path (see section 3d), which refers to a variable
 (which may not yet exist). The second should be a value which should become the value
@@ -324,7 +327,94 @@ of the afore mentioned variable. When evaluated the set command will create the 
 path (like the create command) and set the value of the last variable in the path to
 the second argument.
 
----c) Remove----------------------------------------------------------------------------
+----iii) Remove-------------------------------------------------------------------------
 The remove command removes a variable. The remove command requires a single argument
 that should be a path. The variable linked to the last name in this path will be removed
 when the remove command is evaluated.
+
+----iv) Copy----------------------------------------------------------------------------
+The copy command copies the value of a variable to another variable. The copy command
+requires two arguments which both should be paths. When the copy command is evaluated,
+the value of the variable at the end of the second path will be set to the value of the
+variable at the end of the first path. Variables in the second path will be created if
+they do not already exist (like the create command). The second argument can also be
+left out, in which case the value of the variable at the end of the first path is copied
+to a variable with the same name in the environment.
+
+----v) Move-----------------------------------------------------------------------------
+The move command moves a variable to another location. The move command accepts two
+arguments which should be paths, but requires at least the first. Upon evaluation, if
+only the first path is specified, the variable at the end of the path will be moved to
+the current environment, i.e. it will be copied and then removed in the original
+location. If a second path is given only the value of the variable at the end of the
+first path will be moved such that it is the value of the variable at the end of the
+second path. Note that the original variable (at the end of the first path) will also be
+removed in this case.
+
+---b) Screen commands-------------------------------------------------------------------
+
+----i) Print----------------------------------------------------------------------------
+The print command prints values to the screen. The print command accepts any amount
+of arguments. When evaluated the print command will print each argument on the output
+screen. If an argument is a text value it will print the text stored in the value,
+hence without the symbol " and with all occurences of the symbol \ replaced according
+to the rules mentioned in section 1aiii).
+
+----ii) Clear---------------------------------------------------------------------------
+The clear command removes all output from the output screen when evaluated.
+
+---c) Location commands-----------------------------------------------------------------
+
+----i) Environment----------------------------------------------------------------------
+The environment command changes the environment (see section 3c). It requires one
+argument that should be a path. When evaluated the environment command will set the
+environment to the value of the variable at the end of the given path.
+
+----ii) List----------------------------------------------------------------------------
+The list command prints a list of all variables in a collection. When the list command
+is evaluated it will print a list of all variables in the environment, their values and
+the variables nested within them (correctly indented according to level). If an
+argument is given that is a path, then the list command will instead print the value
+of the variable at the end of the given path. If this value is a collection it will
+do the same as with the environment, but with that collection instead.
+
+---d) File usage------------------------------------------------------------------------
+When using files the program has default extensions it uses. These will be added to any
+filename when no extension is mentioned. The default extensions are ".dat" for files
+that store values and ".scr" for script files.
+
+----i) Save-----------------------------------------------------------------------------
+The save command allows you to store values in files. The save command requires at
+least one argument to work, which should evaluate to a text value. This text value
+should contain the (relative) location of a file on disk to which you want to save
+(which does not have to exist yet). When evaluated the save command will attempt to
+save the environment to this file. If a second argument is given, which should be path,
+the save command will save the value of the variable at the end of the path instead.
+
+----ii) Load----------------------------------------------------------------------------
+The load command allows you to load values from files. The load command requires two
+arguments to work. The first argument should evaluate to a text value which contains
+the (relative) location of a file on disk to load from. The second argument should be
+a path. When evaluated the load command will read the value from the file defined by
+the first argument and assign it to the variable at the end of the path that is the
+second argument. If some variables in this path do not exist, the load command will
+create them like the create command.
+
+The load command can also be used to load text files. Text files will be stored as
+collections of the lines in the text file. For more information about how text files
+will be stored as values, see section ... .
+
+---e) Other commands--------------------------------------------------------------------
+
+----i) Quit-----------------------------------------------------------------------------
+The quit command exits the program when evaluated.
+
+----ii) Text-----------------------------------------------------------------------------
+The text command will turn values into text that describes them. The text command
+requires one argument that can be any value. When evaluated the text command will
+return a text value that contains a textual representation of the given value.
+
+----iii) Void----------------------------------------------------------------------------
+The void command will simply evaluate its arguments and 'void' the result. When
+evaluated the void command will evaluated all its arguments, but disregard the values
+they evaluate to.
