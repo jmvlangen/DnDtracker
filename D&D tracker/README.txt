@@ -3,7 +3,7 @@ D&D tracker:
 
 The D&D tracker functions as an advanced calculator that allows you to store, manage
 and calculate things that you need during a D&D campaign or similar game. The program
-can be used in combination with already existing setups or can be used to `program'
+can be used in combination with already existing setups or can be used to 'program'
 your own stuff. This readme contains a quick explanation of the basic usage of the
 program. For more details about specific existing setups for the program, read the
 readme files corresponding to the related .dat and .scr files.
@@ -57,25 +57,45 @@ above. Hence the only way to get \ in the string is to have \\ in the representa
 
 The only operation that works on texts is addition, which just concatenates texts.
 
+----iv) Booleans------------------------------------------------------------------------
+A boolean is a value that can be either true or false. Since there are only two possible
+boolean values - true and false - they both have their own representation. The boolean
+value true is represented by
+	$TRUE
+and the boolean value false is represented by
+	$FALSE
+
+The operations defined on boolean values are: addition which works like the logical OR,
+subtraction which works like the logical OR in which the second value is inverted,
+multiplication works like the logical AND, and division works like the logical AND in
+which the second argument is inverted.
+
 ---b) Basic Operations------------------------------------------------------------------
 Besides primitive values there are certain operations which combine multiple values
 into a more complicated value. Here follows a list of possible operations.
 
-----i) Addition-------------------------------------------------------------------------
+----i) Equality-------------------------------------------------------------------------
+Equality compares two values to see whether they are the same. An equality is
+represented by the symbol = preceded and succeeded by a value. When evaluated an
+equality will evaluate the value in front and the value thereafter and check whether
+or not their evaluation are the same. If they are the same the equality will evaluate
+to the boolean value true, whilst it will evaluate to the boolean value false otherwise.
+
+----ii) Addition------------------------------------------------------------------------
 Addition represents the sum of two values, hereafter called the terms of the sum. An
 addition is represented by the symbol + preceded and succeeded by a value, which are
 the first and second term respectively. When evaluated the addition will evaluate both
 terms first and then try to add the evaluation of the second term to the evaluation of
 the first. An error will be presented when this is impossible.
 
-----ii) Subtraction---------------------------------------------------------------------
+----iii) Subtraction--------------------------------------------------------------------
 Subtraction represents one value, hereafter called b, subtracted from another value,
 hereafter called a. A subtraction is represented by the symbol - preceded and succeeded
 by a value, which are a and b respectively. When evaluated the subtractions will first
 evaluate both a and b and then try to subtract the evaluation of b from the evaluation
 of a. An error will be presented when this is impossible.
 
-----iii) Multiplication-----------------------------------------------------------------
+----iv) Multiplication------------------------------------------------------------------
 Multiplication represents the product of two values, hereafter called the factors of the
 multiplication. A multiplication is represented by the symbol * preceded and succeeded
 by a value, which are the first and second factor respectively. When evaluated the
@@ -83,14 +103,14 @@ multiplication will first evaluate both factors and then try to multiply the eva
 of the first factor by the evaluation of the second. An error will be presented when
 this is impossible.
 
-----iv) Division------------------------------------------------------------------------
+----v) Division-------------------------------------------------------------------------
 Division represents one value, hereafter named a, divided by another value, hereafter
 called b. A division is represented by the symbol / preceded and succeeded by a value,
 which are the first and second factor respecitively. When evaluated the division will
 first evaluate a and b and then try to divide the evaluation of a by the evaluation
 of b. An error will be presented when this is impossible.
 
-----v) Dice-----------------------------------------------------------------------------
+----vi) Dice----------------------------------------------------------------------------
 A dice value represents the rolling of one or several dice. A dice value is represented
 by one of the following sequences
 	a D b
@@ -114,7 +134,7 @@ will be the sum of the results of two eight sided dice, whilst
 	4 D 6 H 3
 will be the sum of the three highest results of four dice rolls of a six sided dice.
 
-----vi) Grouping values-----------------------------------------------------------------
+----vii) Grouping values----------------------------------------------------------------
 For many purposes it can be usefull to group values. For example in the line
 	2 + 3 * 5
 one might want the addition specified by + to be the sum of
@@ -139,8 +159,9 @@ the value, to avoid confusion.
 However, when using the above mentioned operations one can also leave the brackets out.
 If no brackets are entered, the program will use the default grouping. In this default
 grouping:
-	Each operation i) and ii) will group expressions with iii), iv) and v) as one value.
-	Each operation iii) and iv) will group expressions with v) as one value.
+	Each operation i) will group expression with ii), iii), iv), v) and vi) as one.
+	Each operation ii) and iii) will group expressions with iv), v) and vi) as one.
+	Each operation iv) and v) will group expressions with vi) as one value.
 Hence for our example
 	2 + 3 * 5
 will always be interpreted as
@@ -231,9 +252,14 @@ will look for a variable named c in a collection three levels above the variable
 a. In general n+1 uses of the symbol . in a row will result in looking for a variable
 at level n above whatever is in front of the first symbol . . This generalizes to the
 case where n is 0, at which case it will look for a variable inside the collection
-referred to before the first symbol . , hence at level 0. A last remark about levels
-is that there is always a top level collection and going up levels from there will
-always end again in this top level collection.
+referred to before the first symbol . , hence at level 0.
+
+There are some more remarks to make about levels. First of all there is always a top
+level collection and going up levels from there will always end again in this top level
+collection. Furthermore, when requesting a non-hidden variable from a collection that
+does not contain it, it will request the same variable of the level above. This allows
+non-hidden variables inside the top level to be accessed by all levels below it, unless
+a variable with the same name is defined at such a level.
 
 Besides user created collections, the program also stores a special collection. This
 collection will be referred to as the global collection and is represented by the
@@ -372,9 +398,9 @@ environment to the value of the variable at the end of the given path.
 
 ----ii) List----------------------------------------------------------------------------
 The list command prints a list of all variables in a collection. When the list command
-is evaluated it will print a list of all variables in the environment, their values and
-the variables nested within them (correctly indented according to level). If an
-argument is given that is a path, then the list command will instead print the value
+is evaluated it will print a list of all non-hidden variables in the environment, their
+values and the variables nested within them (correctly indented according to level). If
+an argument is given that is a path, then the list command will instead print the value
 of the variable at the end of the given path. If this value is a collection it will
 do the same as with the environment, but with that collection instead.
 
@@ -404,7 +430,7 @@ The load command can also be used to load text files. Text files will be stored 
 collections of the lines in the text file. For more information about how text files
 will be stored as values, see section ... .
 
----e) Other commands--------------------------------------------------------------------
+---e) Miscellaneous commands------------------------------------------------------------
 
 ----i) Quit-----------------------------------------------------------------------------
 The quit command exits the program when evaluated.
@@ -414,7 +440,174 @@ The text command will turn values into text that describes them. The text comman
 requires one argument that can be any value. When evaluated the text command will
 return a text value that contains a textual representation of the given value.
 
-----iii) Void----------------------------------------------------------------------------
+----iii) Void---------------------------------------------------------------------------
 The void command will simply evaluate its arguments and 'void' the result. When
 evaluated the void command will evaluated all its arguments, but disregard the values
 they evaluate to.
+
+---f) Programming commands--------------------------------------------------------------
+
+----i) If-------------------------------------------------------------------------------
+The if command evaluates a value only if a given value evaluates to true. The if
+command needs at least two arguments, but one can give three. When the if command
+is evaluated it will first evaluate the first argument. If this argument evaluates to
+anything but a void value or the boolean value false, the second argument will be
+evaluated and the third ignored if given. If the first argument does evaluate to a void
+value or a boolean value false, the second argument will be ignored and the third
+argument will be evaluated if given. Note that in all cases the if command always
+evaluates to a void value.
+
+--6) Special operations-----------------------------------------------------------------
+Besides the standard operations described in section 1b) there are some operations that
+can be used for advanced usage. These operations are described in this section.
+
+---a) Auto evaluate---------------------------------------------------------------------
+For certain applications you might want to first evaluate a value before passing it as
+an argument to another evaluation. This is possible by surrounding the value with
+square brackets, i.e. the symbols [ and ] . Any value between the symbol [ and a
+matching next symbol ] will first be evaluated and then be regarded as the value that
+results from this evaluation.
+
+As an example you might want to print the outcome of a dice roll. If you write
+	print(1D6)
+the output on the screen would be
+	1D6
+as the program just prints that value. However when you write
+	print([1D6])
+the argument passed to the print command will be an evaluation of
+	1D6
+and the output on screen might for example be
+	3
+
+---b) Values defined by primitive values------------------------------------------------
+There could be possible situations in which you want to write down a fixed value,
+but rather a value defined by the evaluation of some other value. The program has a way
+to convert certain primitive values into values. This can be done by surrounding a value
+by the symbols < and > .
+
+To explain how this works, let A be the representation of a value. Now if the program
+evaluates
+	< A >
+it will first evaluate A to some primitive value B . Next it will attempt to interpret
+B itself as a value. If B is a non-negative integer value the program will regard it as
+the variable with as name the symbol _ followed by a representation of the integer. If
+B is a text value, the program will rather interpret the text in B as the representation
+of a value and read it like that. In all other cases an error will be presented.
+
+To give an example, the value
+	< "3" >
+will evaluate to
+	3
+whilst the value
+	< 3 >
+will evaluate to the evaluation of the value stored in the variable named
+	_3
+
+--7) Advanced usage of collections------------------------------------------------------
+Collections as described in section 3b) can be used to create your own types of values
+with special behavior. This is all done by assigning values to some special hidden
+variables inside the collection. This section will describe what these values are
+and what effect they have when set.
+
+---a) Value-----------------------------------------------------------------------------
+A collection can be given special behavior that should happen when it is evaluated. To
+do this one has to create and set the value of the hidden variable named
+	_value
+If this variable inside a collection, then whenever that collection is evaluated that
+variable will be evaluated instead.
+
+For example, when we evaluate
+	{ a = 3 , b = 5 , _value = a + b }
+we will get
+	8
+	
+---b) Text------------------------------------------------------------------------------
+It is possible to give a special text that should be printed whenever we want to print
+something for a collection. For this one must create and set the value of the variable
+named
+	_toString
+Whenever the program needs a textual representation of the collection, it will evaluate
+the variable named
+	_toString
+when it is defined inside the collection and use the text value it evaluates to. Note
+that it is necessary that the variable evaluates to a text value or else an error will
+be presented.
+
+An example of the usage of this hidden variable would be
+	print({ _toString = "This is my personal collection."})
+which would print
+	This is my personal collection.
+to the screen when evaluated.
+
+Note that currently some bugs for saving and loading might occur when this value is set.
+It is therefore advised not to use this option unless absolutely necessary.
+
+---c) Type------------------------------------------------------------------------------
+When constructing your own type of values using values it can be usefull to specify
+their type. This can be done by creating and setting the value of the hidden variable
+named
+	_type
+which should evaluate to a text value. If this variable is correctly set the program
+will use its value as the type for error messages and other purposes. Note that
+currently there is not much use for this option besides for debugging purposes.
+
+---d) Addition--------------------------------------------------------------------------
+A collection can be given special behavior such that it works with addition. To do this
+one should create and set the value of the hidden variable named
+	_add
+If this value is set and this collection is the first term in an addition, the addition
+will be evaluated by evaluating the variable named
+	_add
+with as arguments the two terms of the addition.
+
+Note that behavior for this option has not yet been finalized.
+
+---e) Subtraction-----------------------------------------------------------------------
+One can make it such that a collection can be used in a subtraction. To do this one
+should create and set the value of the hidden variable named
+	_subtract
+If this value is set and this collection is the value a of a subtraction (see section
+1biii) the variable named
+	_substract
+will be evaluated with as arguments a and b whenever the subtraction is evaluated.
+
+Note that behavior for this option has not yet been finalized.
+
+---f) Multiplication--------------------------------------------------------------------
+A collection can be given special behavior when used in a multiplication. In order to do
+this one should create and set the value of the hidden variable named
+	_product
+Whenever a product is evaluated and the first factor is a collection with this variable
+defined, the variable named
+	_product
+will be evaluated instead with as arguments both factors.
+
+Note that behavior for this option has not yet been finalized.
+
+---g) Division--------------------------------------------------------------------------
+Is is possible to give a collection special behavior inside a division. To make this
+possible the variable named
+	_divide
+should be created and set. If this is the case for some collection, then whenever that
+collection is the value a in a division (see section 1bv) evaluation of the division
+will result in the evaluation of the variable _divide with the values a and b as
+arguments.
+
+Note that behavior for this option has not yet been finalized.
+
+---h) Templates-------------------------------------------------------------------------
+A collection already has access to all variables on levels above it, but it is also
+possible to give it access to the variables in a specific collection called a template.
+In contrast to variable on higher levels a collection can access hidden variables inside
+a template. This allows the user to define the behavior of a certain collection only
+once and easily create more collections with the same behavior.
+
+To create and set a template for a collection, one has to create and set the hidden 
+variable named
+	_template
+to any value that evaluates to the required template.
+
+An example of the usage of a template would for example be
+	{ a = 3 , _template = { _value = a } } 
+which would evaluate to
+	3
