@@ -11,21 +11,21 @@ readme files corresponding to the related .dat and .scr files.
 --1) Values-----------------------------------------------------------------------------
 Everything that you enter into the program or is stored inside the program is considered
 to be a value. A value can be everything from an integer to a complicated calculation.
-The important property of a value is that it can always be evaluated to a simpler value,
+The important property of a value is that it can always be evaluated to a simpler value
 called a primitive value. For calculations this simply means that the result of the
 calculation is calculated. For example, if we evaluate the value:
 	5 + 3
 the result will be the value
 	8
-This is the most basic way to evaluate a value, but there are also values which have a
+This is the most basic way to evaluate a value, but there are also values which have
 more complicated behavior when evaluated.
 
-Below we list the most basic types of values and their behavior when evaluated
+Below we list the most basic types of values and their behavior when evaluated.
 
 ---a) Primitive Values------------------------------------------------------------------
-The simplest types of values are the primitive values. The evaluation of any value will
-always result in a primitive value and every primitive value will always evaluate to
-itself (with one exception explained in ...). Here are the primitive values you will
+The simplest type of value is a primitive value. The evaluation of any value will always
+result in a primitive value and every primitive value will always evaluate to itself
+(with one exception explained in section 7). Here are the primitive values you will
 encounter most often
 
 ----i) Void Value-----------------------------------------------------------------------
@@ -46,14 +46,14 @@ integer 'x' by an integer 'y' will result in the largest integer 'z' such that '
 ----iii) Texts--------------------------------------------------------------------------
 A text is a value that represents a text. Texts will be represented by the characters
 inside the text (in the right order) preceded and succeeded by the symbol " Furthermore
-certain characters in the string will be replaced by a different combination of two
+certain characters in the text will be replaced by a different combination of two
 characters as follows
 	" will be represented by \"
 	\ will be represented by \\
 	the newline characters will be represented by \n
 Note that the symbol \ succeeded by another symbol in the representation will always
-result in the succeeding symbol in the string if it is not one of the cases described
-above. Hence the only way to get \ in the string is to have \\ in the representation.
+result in the succeeding symbol in the text if it is not one of the cases described
+above. Hence the only way to get \ in the text is to have \\ in the representation.
 
 The only operation that works on texts is addition, which just concatenates texts.
 
@@ -67,18 +67,18 @@ and the boolean value false is represented by
 
 The operations defined on boolean values are: addition which works like the logical OR,
 subtraction which works like the logical OR in which the second value is inverted,
-multiplication works like the logical AND, and division works like the logical AND in
-which the second argument is inverted.
+multiplication which works like the logical AND, and division which works like the
+logical AND in which the second argument is inverted.
 
 ---b) Basic Operations------------------------------------------------------------------
 Besides primitive values there are certain operations which combine multiple values
-into a more complicated value. Here follows a list of possible operations.
+into another value. Here follows a list of possible operations.
 
 ----i) Equality-------------------------------------------------------------------------
 Equality compares two values to see whether they are the same. An equality is
 represented by the symbol = preceded and succeeded by a value. When evaluated an
 equality will evaluate the value in front and the value thereafter and check whether
-or not their evaluation are the same. If they are the same the equality will evaluate
+or not their evaluations are the same. If they are the same the equality will evaluate
 to the boolean value true, whilst it will evaluate to the boolean value false otherwise.
 
 ----ii) Addition------------------------------------------------------------------------
@@ -117,11 +117,11 @@ by one of the following sequences
 	a D b L c
 	a D b H c
 In these sequences a, b and c should be values, whilst D, L and H precisely mean these
-symbols. (They may also be the lower case version.) When evaluated a dice value will
+symbols. (They may also be the lower case letters.) When evaluated a dice value will
 first evaluate a and b (and c if given), of which we shall denote their evaluations by
 ea and eb (and ec) respectively. Next it will check whether ea and eb are positive
-integers (and if ec is a positive integer at most equal to eb). If not it will present
-an error. If so it will roll ea dice of size eb. The result of these dice rolls will be
+integers (and if ec is a positive integer at most equal to eb). If not, it will present
+an error. If so, it will roll ea dice of size eb. The result of these dice rolls will be
 presented to the user. Next it will order the results from lowest to highest. If c was
 specified it will keep the highest (respectively lowest) ec of these results if c was
 preceeded by the symbol H (or L respectively). If c was not specified it will keep all
@@ -192,8 +192,8 @@ usage of variables will be explained
 ---a) Names-----------------------------------------------------------------------------
 As mentioned every variable is defined by a name. A name of a variable may consist of
 alphanumerical characters, but must start with a letter. Alternatively one can start a
-variable with the symbol _ which indicates a hidden variable (see section ... for more
-explanation of what this means).
+variable with the symbol _ which indicates a hidden variable. Hidden variables are often
+ignored when displaying collections and are used for more advanced behavior.
 
 Names of the type defined above can also be used to represent values. If used in such
 a way the value of the name will be a reference to a variable with the corresponding
@@ -204,14 +204,14 @@ not be found an error will be presented.
 ---b) Collections-----------------------------------------------------------------------
 A collection is a value that can store variables. A collection is represented by a
 comma seperated list enclosed in curly brackets (the symbols { and } ). Each entry in
-this list consists of a valid name, the symbol = and then a value. An example of a list.
-An example of such a collection would for example be
+this list consists of a valid name, the symbol = and then a value. An example of such a
+collection would be
 	{ a = 2 , b = "text"}
 
 A collection is in fact a primitive type and will thus result in itself when evaluated.
 The operators defined in section 1.b) will present the user with errors if they are
 evaluated on collections. Special behavior for these operators and evaluation can
-however be defined. Section ... will describe this in detail.
+however be defined. Section 7 will describe this in detail.
 
 ---c) Nested variables------------------------------------------------------------------
 In order to access variables within a collection one can use the symbol . . If Col is
@@ -233,7 +233,7 @@ as the part before the dot will evaluate to the collection
 One could also combine multiple usages of the symbol . . For example
 	a.b.c
 will acces the value of the variable named c inside the collection stored in the
-variable named b inside the collection stored under the name a. One could think as this
+variable named b inside the collection stored under the name a. One could think of this
 as the variable named c being two levels below the variable named a. One could therefore
 interpret the symbol . as going down one level.
 
@@ -245,13 +245,13 @@ will evaluate to
 In this case
 	a..b
 means the program will look for the variable named b in the collection that contains
-the variable named b, hence one level above the variable named a. Multiple uses of the
+the variable named a, hence one level above the variable named a. Multiple uses of the
 symbol . would go up more levels. For example
 	a....c
 will look for a variable named c in a collection three levels above the variable named
 a. In general n+1 uses of the symbol . in a row will result in looking for a variable
 at level n above whatever is in front of the first symbol . . This generalizes to the
-case where n is 0, at which case it will look for a variable inside the collection
+case where n is 0, in which case it will look for a variable inside the collection
 referred to before the first symbol . , hence at level 0.
 
 There are some more remarks to make about levels. First of all there is always a top
@@ -269,13 +269,13 @@ symbol . . For example
 	:.b
 accesses the variable named b in the global collection, but
 	:b
-does as well. Note that any variables will only be stored when they are at some level
-below the global collection, but will only be stored as long as the program is running.
-To save variables between sessions look at ...
+does as well. Note that variables will only be stored when they are at some level below
+the global collection, but that these stored variables will only be stored as long as
+the program is running. To save and load variables between sessions look at section 5d).
 
 Besides the global collection the program also keeps track of a current collection,
 which is called the environment. By default this environment is set to be the global
-collection, but it can be changed (see section ...). When names of variables are typed
+collection, but it can be changed (see section 5ci). When names of variables are typed
 without the symbol . in front, the program looks for these variables inside this
 collection. One can also write the symbol . without any value in front, in which case
 it will link to variables relative to the environment. For example
@@ -294,7 +294,7 @@ same will happen when evaluating any value inside a variable. For example
 	..c
 where the variable named c in the collection above the environment has value
 	a + b
-this will evaluate in the same way as the first example.
+will evaluate in the same way as the first example.
 
 ---d) Paths-----------------------------------------------------------------------------
 Throughout the following sections we will talk about certain values, which we shall
@@ -309,32 +309,37 @@ application of this is given by system commands (see section 5). A value to be e
 with arguments is represented by the value followed by a comma seperated sequence of
 values surrounded by brackets, i.e. the symbols ( and ) . For example, when
 	coolStuff( a , 3 , "Just do it")
-is evaluated, it will evaluated the value coolStuff with arguments
+is evaluated, it will evaluate the value coolStuff with arguments
 	a
 	3
 and
 	"Just do it"
 	
-Note that the implementation of arguments is now limited to two cases: arguments passed
-to variables with the symbol ( directly after the name, and arguments on the input line.
-In the latter case brackets and comma's are left out. From a list of values on the
-command line the first will be taken as the value to be evaluated and the rest will be
-taken as the arguments for evaluation.
+Note that arguments apply only to the value directly attached to the opening bracket ( ,
+but are passed along during evaluation. For example
+	a + b(3)
+will only evaluate the variable named b with the argument 3, whilst
+	(a + b)(3)
+will evaluate the addition with the argument 3 and thus also evaluate a and b with the
+same argument. Note that adding seperate arguments to a value will ignore arguments
+passed along during evaluation, so
+	(a + b(4))(3)
+will evaluate the variable named b with the argument 4 and not with the argument 3.
 
 ---a) Argument values-------------------------------------------------------------------
 A special type of value exists that is closely linked to arguments, called the argument
 value. An argument value is represented by the symbol # followed by a (strictly)
 positive integer value, which we will call n. When evaluated an argument value will
-instead evaluate the n'th argument given when evaluated. When this argument does not
-exist it will evaluate to a void value.
+evaluate to the evaluation of the n'th argument given in evaluation. When this argument
+does not exist it will evaluate to a void value.
 
 --5) System Commands--------------------------------------------------------------------
 Inside the global collection there are some special variables known as system commands.
 These variables can not be modified in any way and store specific values that perform
-certain special actions when being evaluated. This section explains what these system
-commands do. In each subsection we will name the command after the name of the
-corresponding variable inside the global collection. Note that each command will
-evaluate to a void value unless otherwise mentioned.
+certain special actions when evaluated. This section explains what these system commands
+do. In each subsection we will name the command after the name of the corresponding
+variable inside the global collection. Note that each command will evaluate to a void
+value unless otherwise mentioned.
 
 ---a) Variable manipulation commands----------------------------------------------------
 
@@ -373,9 +378,9 @@ arguments which should be paths, but requires at least the first. Upon evaluatio
 only the first path is specified, the variable at the end of the path will be moved to
 the current environment, i.e. it will be copied and then removed in the original
 location. If a second path is given only the value of the variable at the end of the
-first path will be moved such that it is the value of the variable at the end of the
-second path. Note that the original variable (at the end of the first path) will also be
-removed in this case.
+first path will be moved such that it becomes the value of the variable at the end of
+the second path. Note that the original variable (at the end of the first path) will
+also be removed in this case.
 
 ---b) Screen commands-------------------------------------------------------------------
 
@@ -398,11 +403,22 @@ environment to the value of the variable at the end of the given path.
 
 ----ii) List----------------------------------------------------------------------------
 The list command prints a list of all variables in a collection. When the list command
-is evaluated it will print a list of all non-hidden variables in the environment, their
-values and the variables nested within them (correctly indented according to level). If
-an argument is given that is a path, then the list command will instead print the value
-of the variable at the end of the given path. If this value is a collection it will
-do the same as with the environment, but with that collection instead.
+is evaluated it will print a list of all non-hidden variables in the environment and
+their values. In this case values which are collections will be denoted simply by
+	{...}
+or their value if specified (see section 7a). If an argument is given that is a path,
+then the list command will instead print the value of the variable at the end of the
+given path. If this value is a collection it will do the same as with the environment,
+but with that collection instead.
+
+If a second argument is given and does not evaluate to the boolean value false or a
+void value, then the list command will also display the contents of all collections it
+encounters whilst printing values. Note that these values will be indented according to
+the level they are below the collection list originally tried to list.
+
+If a third argument is provided to the list command and it evaluates to anything but
+a void value or the boolean value false, the list command will also display all the
+hidden values stored inside collections it lists.
 
 ---d) File usage------------------------------------------------------------------------
 When using files the program has default extensions it uses. These will be added to any
@@ -427,8 +443,7 @@ second argument. If some variables in this path do not exist, the load command w
 create them like the create command.
 
 The load command can also be used to load text files. Text files will be stored as
-collections of the lines in the text file. For more information about how text files
-will be stored as values, see section ... .
+collections of the lines in the text file.
 
 ---e) Miscellaneous commands------------------------------------------------------------
 
@@ -506,15 +521,15 @@ will evaluate to the evaluation of the value stored in the variable named
 --7) Advanced usage of collections------------------------------------------------------
 Collections as described in section 3b) can be used to create your own types of values
 with special behavior. This is all done by assigning values to some special hidden
-variables inside the collection. This section will describe what these values are
+variables inside the collection. This section will describe what these variables are
 and what effect they have when set.
 
 ---a) Value-----------------------------------------------------------------------------
 A collection can be given special behavior that should happen when it is evaluated. To
 do this one has to create and set the value of the hidden variable named
 	_value
-If this variable inside a collection, then whenever that collection is evaluated that
-variable will be evaluated instead.
+If this variable inside a collection is defined, then whenever that collection is
+evaluated that variable will be evaluated instead.
 
 For example, when we evaluate
 	{ a = 3 , b = 5 , _value = a + b }
@@ -543,9 +558,8 @@ Note that currently some bugs for saving and loading might occur when this value
 It is therefore advised not to use this option unless absolutely necessary.
 
 ---c) Type------------------------------------------------------------------------------
-When constructing your own type of values using values it can be usefull to specify
-their type. This can be done by creating and setting the value of the hidden variable
-named
+When constructing your own type of values it can be usefull to specify their type. This
+can be done by creating and setting the value of the hidden variable named
 	_type
 which should evaluate to a text value. If this variable is correctly set the program
 will use its value as the type for error messages and other purposes. Note that
