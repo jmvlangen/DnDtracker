@@ -2,7 +2,6 @@ package data.command;
 
 import java.io.PrintStream;
 
-import data.BooleanValue;
 import data.DataContainer;
 import data.DataException;
 import data.EvaluationException;
@@ -30,19 +29,12 @@ public class SetCommand extends CommandValue{
 		if(args.length < 2) throw new EvaluationException(String.format("The set command needs at least two argument: %s",USAGE_DESCRIPTION));
 		try{
 			Path path = Path.convertToPath(args[0], environment.getPath());
-			path.setValue(args[1],args.length >= 3 ? getBool(args[3],environment,output) : false);
+			path.setValue(args[1],args.length >= 3 ? args[3].evaluate(environment, new Value[0], output).getBool() : true);
 			output.printf("Value of \'%s\' set to \'%s\'.\n", path.toString(), args[1].toString());
 			return new VoidValue();
 		} catch(DataException|PathException e){
 			throw new EvaluationException(String.format("Can not evaluate, since: %s",e.getMessage()),e);
 		}
-	}
-
-	private boolean getBool(Value value, DataContainer environment, PrintStream output) throws EvaluationException {
-		PrimitiveValue evaluatedValue = value.evaluate(environment, new Value[0], output);
-		if(evaluatedValue instanceof VoidValue) return false;
-		if(evaluatedValue instanceof BooleanValue) return ((BooleanValue) evaluatedValue).getBooleanFlag();
-		return true;
 	}
 
 	@Override

@@ -43,4 +43,10 @@ public interface PrimitiveValue extends Value {
 	 * @throws ComputationException If the division fails or is not supported by this Value object.
 	 */
 	public PrimitiveValue divideBy(PrimitiveValue other) throws ComputationException;
+	
+	/**
+	 * Represents this Value object as a boolean.
+	 * @return TRUE unless it is an object equivalent to the boolean value FALSE or a VoidValue.
+	 */
+	public boolean getBool();
 }

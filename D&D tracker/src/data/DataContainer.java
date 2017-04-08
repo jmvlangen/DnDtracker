@@ -426,4 +426,9 @@ public class DataContainer implements PrimitiveValue, Iterable<DataPair>, Refere
 	public boolean equals(Value other) {
 		return other instanceof DataContainer && dataSet.equals(((DataContainer) other).dataSet);
 	}
+
+	@Override
+	public boolean getBool() {
+		return true;
+	}
 }

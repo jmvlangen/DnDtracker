@@ -165,4 +165,9 @@ public class IntValue implements PrimitiveValue {
 	public boolean equals(Value other) {
 		return other instanceof IntValue && ((IntValue) other).number == number;
 	}
+
+	@Override
+	public boolean getBool() {
+		return true;
+	}
 }

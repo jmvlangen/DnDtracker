@@ -134,4 +134,9 @@ public class TextValue implements PrimitiveValue{
 	public boolean equals(Value other) {
 		return other instanceof TextValue && ((TextValue) other).text.equals(text);
 	}
+
+	@Override
+	public boolean getBool() {
+		return true;
+	}
 }

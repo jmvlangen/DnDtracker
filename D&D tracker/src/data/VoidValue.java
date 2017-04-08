@@ -87,4 +87,9 @@ public class VoidValue implements PrimitiveValue {
 	public boolean equals(Value other) {
 		return other instanceof VoidValue;
 	}
+
+	@Override
+	public boolean getBool() {
+		return false;
+	}
 }
