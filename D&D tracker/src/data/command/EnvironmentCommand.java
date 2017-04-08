@@ -15,7 +15,7 @@ import main.Tracker;
 
 public class EnvironmentCommand extends CommandValue {
 	public static final String COMMAND_WORD = "environment";
-	public static final String USAGE_DESCRIPTION = "environment <collection>";
+	public static final String USAGE_DESCRIPTION = "environment [collection]";
 
 	@Override
 	public Value copy() {
@@ -24,8 +24,7 @@ public class EnvironmentCommand extends CommandValue {
 
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
-		if(args.length < 1) throw new EvaluationException(String.format("The command \'environment\' needs at least one arguments to work: %s",USAGE_DESCRIPTION));
-		Tracker.mainInstance.currentContainer = getDataContainer(args[0],environment);
+		if(args.length >= 1) Tracker.mainInstance.currentContainer = getDataContainer(args[0],environment);
 		output.printf("Currently working in \'%s\'.\n", Tracker.mainInstance.currentContainer.getPath());
 		return new VoidValue();
 	}

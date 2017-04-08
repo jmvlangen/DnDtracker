@@ -403,9 +403,11 @@ The clear command removes all output from the output screen when evaluated.
 ---c) Location commands-----------------------------------------------------------------
 
 ----i) Environment----------------------------------------------------------------------
-The environment command changes the environment (see section 3c). It requires one
-argument that should be a path. When evaluated the environment command will set the
-environment to the value of the variable at the end of the given path.
+The environment command changes or displays the environment (see section 3c). If no
+argument is given the environment command will display the current environment when
+evaluated. If an argument is given it should be a path. When evaluated the environment
+command will then set the environment to the value of the variable at the end of the
+given path.
 
 ----ii) List----------------------------------------------------------------------------
 The list command prints a list of all variables in a collection. When the list command
