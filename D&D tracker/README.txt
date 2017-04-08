@@ -356,7 +356,9 @@ arguments. The first should be a path (see section 3d), which refers to a variab
 (which may not yet exist). The second should be a value which should become the value
 of the afore mentioned variable. When evaluated the set command will create the given
 path (like the create command) and set the value of the last variable in the path to
-the second argument.
+the second argument. When the optional third argument is set to something that evaluates
+to the boolean value false or a void value, the set command will not create variables if
+they do not exist.
 
 ----iii) Remove-------------------------------------------------------------------------
 The remove command removes a variable. The remove command requires a single argument
@@ -370,7 +372,9 @@ the value of the variable at the end of the second path will be set to the value
 variable at the end of the first path. Variables in the second path will be created if
 they do not already exist (like the create command). The second argument can also be
 left out, in which case the value of the variable at the end of the first path is copied
-to a variable with the same name in the environment.
+to a variable with the same name in the environment. When the optional third argument is
+set to something that evaluates to the boolean value false or a void value, the copy
+command will not create variables if they do not exist.
 
 ----v) Move-----------------------------------------------------------------------------
 The move command moves a variable to another location. The move command accepts two
@@ -380,7 +384,9 @@ the current environment, i.e. it will be copied and then removed in the original
 location. If a second path is given only the value of the variable at the end of the
 first path will be moved such that it becomes the value of the variable at the end of
 the second path. Note that the original variable (at the end of the first path) will
-also be removed in this case.
+also be removed in this case. When the optional third argument is set to something that
+evaluates to the boolean value false or a void value, the set command will not create
+variables if they do not exist.
 
 ---b) Screen commands-------------------------------------------------------------------
 

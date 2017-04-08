@@ -132,12 +132,13 @@ public class Path {
 	/**
 	 * Sets the Value object at the end of this path. Creating the path if necessary.
 	 * @param value The value that the Value object at the end of this path must get.
+	 * @param createPath TRUE if the path should be created if it doesn't already.
 	 * @throws DataException If the value at the end of the path could not be set.
 	 */
-	public void setValue(Value value) throws DataException {
-		createPath();
+	public void setValue(Value value, boolean createPath) throws DataException {
+		if(createPath) createPath();
 		Value oldValue = getLowestValue();
-		if(oldValue instanceof DataContainer) (new Path(this,DataContainer.VALUE_NAME)).setValue(value);
+		if(oldValue instanceof DataContainer) (new Path(this,DataContainer.VALUE_NAME)).setValue(value,createPath);
 		else{
 			DataPair dataPair = getLowestDataPair();
 			if(dataPair instanceof Command) throw new DataException(String.format("Can not manipulate %s as it is a system command.", dataPair.getName()));

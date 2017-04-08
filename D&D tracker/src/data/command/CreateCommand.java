@@ -28,7 +28,7 @@ public class CreateCommand extends CommandValue {
 			path.createPath();
 			output.printf("Variable \'%s\' created.\n", path.toString());
 			if(args.length >= 2){
-				path.setValue(args[1]);
+				path.setValue(args[1], false);
 				output.printf("Value of \'%s\' set to \'%s\'.\n", path.toString(), args[1].toString());
 			}
 			return new VoidValue();

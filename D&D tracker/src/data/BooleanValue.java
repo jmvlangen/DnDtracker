@@ -113,4 +113,11 @@ public class BooleanValue implements PrimitiveValue {
 	public boolean equals(Value other) {
 		return other instanceof BooleanValue && ((BooleanValue) other).flag == flag;
 	}
+	
+	/**
+	 * @return TRUE if this is the BooleanValue true and FALSE if it is the BooleanValue false.
+	 */
+	public boolean getBooleanFlag(){
+		return flag;
+	}
 }

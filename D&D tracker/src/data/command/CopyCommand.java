@@ -2,6 +2,8 @@ package data.command;
 
 import java.io.PrintStream;
 
+import data.BooleanValue;
+import data.DataContainer;
 import data.DataException;
 import data.DataPair;
 import data.EvaluationException;
@@ -16,7 +18,7 @@ import data.VoidValue;
  */
 public class CopyCommand extends CommandValue {
 	public static String COMMAND_WORD = "copy";
-	public static String USAGE_DESCRIPTION = "copy <variable> [destination]";
+	public static String USAGE_DESCRIPTION = "copy <variable> [destination] [createPath?]";
 
 	@Override
 	public Value copy() {
@@ -37,13 +39,20 @@ public class CopyCommand extends CommandValue {
 			}
 			else{
 				Path result = Path.convertToPath(args[1], environment.getPath());
-				result.setValue(original.getValue().copy());
+				result.setValue(original.getValue().copy(), args.length >= 3 ? getBool(args[3],environment,output) : false);
 				output.printf("Variable \'%s\' copied to \'%s\'.\n",original.getPath(),result);
 			}
 		} catch (DataException|PathException e) {
 			throw new EvaluationException(String.format("Could not evaluate, since: %s.",e.getMessage()),e);
 		}
 		return new VoidValue();
+	}
+
+	private boolean getBool(Value value, DataContainer environment, PrintStream output) throws EvaluationException {
+		PrimitiveValue evaluatedValue = value.evaluate(environment, new Value[0], output);
+		if(evaluatedValue instanceof VoidValue) return false;
+		if(evaluatedValue instanceof BooleanValue) return ((BooleanValue) evaluatedValue).getBooleanFlag();
+		return true;
 	}
 
 	@Override
