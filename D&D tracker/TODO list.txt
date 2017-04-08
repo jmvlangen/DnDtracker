@@ -1,7 +1,7 @@
 Internal workings:
 	AutoEvaluate within values: Store values that should be preEvaluated and preEvaluate before evaluation.
-	Correctly manage _toString with respect to saving and loading
 	Finalize operations on collections.
+	implement scripts
 
 Data files and scripts:
 	Usefull startup script

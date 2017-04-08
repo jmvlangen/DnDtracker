@@ -562,9 +562,6 @@ which would print
 	This is my personal collection.
 to the screen when evaluated.
 
-Note that currently some bugs for saving and loading might occur when this value is set.
-It is therefore advised not to use this option unless absolutely necessary.
-
 ---c) Type------------------------------------------------------------------------------
 When constructing your own type of values it can be usefull to specify their type. This
 can be done by creating and setting the value of the hidden variable named
