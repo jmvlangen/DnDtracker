@@ -1,7 +1,6 @@
 Internal workings:
 	AutoEvaluate within values: Store values that should be preEvaluated and preEvaluate before evaluation.
 	Finalize operations on collections.
-	implement scripts
 
 Data files and scripts:
 	Usefull startup script

@@ -453,6 +453,15 @@ create them like the create command.
 The load command can also be used to load text files. Text files will be stored as
 collections of the lines in the text file.
 
+----iii) Run----------------------------------------------------------------------------
+The run command allows you to run scripts. The text command requires one argument which
+should evaluate to a text value which contains the (relative) location of a file on
+disk. When evaluating the run command, it will open this file and execute every line in
+the file as if it was entered on the input line. Files that can be used in such a way
+are called script files. The default extension for such files is .scr . At startup the
+program will always attempt to run a file named startup.scr . This could be used to
+load commands that you want to load at the start.
+
 ---e) Miscellaneous commands------------------------------------------------------------
 
 ----i) Quit-----------------------------------------------------------------------------

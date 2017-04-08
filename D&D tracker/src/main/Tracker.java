@@ -1,5 +1,7 @@
 package main;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import data.command.MoveCommand;
 import data.command.PrintCommand;
 import data.command.QuitCommand;
 import data.command.RemoveCommand;
+import data.command.RunCommand;
 import data.command.SaveCommand;
 import data.command.SetCommand;
 import data.command.SortCommand;
@@ -32,6 +35,7 @@ import data.command.VoidCommand;
 public class Tracker {
 	public static Tracker mainInstance;
 	public static final String PROGRAM_NAME = "D&D tracker";
+	public static final String STARTUP_SCRIPT_NAME = "startup.scr";
 	
 	public DataContainer currentContainer;
 	public DataContainer mainContainer;
@@ -84,8 +88,34 @@ public class Tracker {
 	public void start(){
 		screen = new ScreenHandler(this,PROGRAM_NAME);
 		loadSystemCommands(screen.getOutput());
+		runStartupScript();
 	}
 	
+	private void runStartupScript() {
+		FileReader fileReader = null;
+		Scanner input = null;
+		try{
+			fileReader = new FileReader(STARTUP_SCRIPT_NAME);
+			input = new Scanner(fileReader);
+			while(input.hasNextLine()){
+				Tracker.mainInstance.dispatchLine(input.nextLine(), screen.getOutput());
+			}
+			input.close();
+			fileReader.close();
+		} catch(IOException e){
+			closeReaders(fileReader, input);
+		}
+	}
+	
+	private void closeReaders(FileReader fileReader, Scanner input) {
+		try{
+			if(input != null) input.close();
+			if(fileReader != null) fileReader.close();
+		} catch(IOException e){
+			//Do nothing
+		}
+	}
+
 	public void quit(){
 		System.exit(0);
 	}
@@ -107,6 +137,7 @@ public class Tracker {
 		loadCommand(new TextCommand(),output);
 		loadCommand(new VoidCommand(),output);
 		loadCommand(new IfCommand(),output);
+		loadCommand(new RunCommand(),output);
 	}
 	
 	private void loadCommand(CommandValue value, PrintStream output){
