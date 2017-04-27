@@ -64,7 +64,7 @@ public class ListCommand extends CommandValue{
 				output.printf("\n");
 				printDataContainer((DataContainer) value, level+1, output, printSubDataContainers, printHiddenDataPairs);
 			}else{
-				output.printf("{...}");
+				output.printf("{...}\n");
 			}
 		}
 		else{
