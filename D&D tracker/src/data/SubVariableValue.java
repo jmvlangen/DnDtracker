@@ -63,6 +63,7 @@ public class SubVariableValue implements Value {
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(reference.toString());
+		if(reference instanceof GlobalValue) return sb.append(variable.toString()).toString();
 		for(int i = 0 ; i <= level ; i++) sb.append(".");
 		if(!(variable instanceof VoidValue)) sb.append(variable.toString());
 		return sb.toString();
