@@ -1,5 +1,10 @@
 package data.command;
 
+import java.io.PrintStream;
+
+import data.DataContainer;
+import data.EvaluationException;
+import data.PrimitiveValue;
 import data.Value;
 
 /**
@@ -38,5 +43,35 @@ public abstract class CommandValue implements Value {
 	
 	public boolean equals(Value other){
 		return this.getClass().equals(other.getClass());
+	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' does not evaluate to a collection", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
 	}
 }

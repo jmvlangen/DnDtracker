@@ -40,7 +40,7 @@ public class SumValue implements Value{
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
 		try{
-			return a.evaluate(environment,args, output).add(b.evaluate(environment, args, output));
+			return a.evaluateToFirstAddable(environment,args, output).add(b.evaluateToFirstAddable(environment, args, output));
 		} catch(ComputationException e){
 			throw new EvaluationException(String.format("Can not evaluate: %s",e.getMessage()),e);
 		}
@@ -69,5 +69,35 @@ public class SumValue implements Value{
 		if(!(other instanceof SumValue)) return false;
 		SumValue o = (SumValue) other;
 		return a.equals(o.a) && b.equals(o.b);
+	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output).evaluateToFirstDataContainer(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output).evaluateToFirstAddable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output).evaluateToFirstSubtractible(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output).evaluateToFirstMultiplicable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output).evaluateToFirstDivisible(environment, args, output);
 	}
 }

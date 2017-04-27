@@ -59,4 +59,38 @@ public class ArgumentValue implements Value{
 	public boolean equals(Value other) {
 		return other instanceof ArgumentValue && ((ArgumentValue) other).number == number;
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
+		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstDataContainer(environment, args, output);
+		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstAddable(environment, args, output);
+		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstSubtractible(environment, args, output);
+		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstMultiplicable(environment, args, output);
+		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstDivisible(environment, args, output);
+		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
+	}
 }

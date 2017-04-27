@@ -67,4 +67,34 @@ public class GlobalValue implements ReferenceValue {
 	public boolean equals(Value other) {
 		return other instanceof GlobalValue;
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.getTopLevel();
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.getTopLevel().evaluateToFirstAddable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.getTopLevel().evaluateToFirstSubtractible(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.getTopLevel().evaluateToFirstMultiplicable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.getTopLevel().evaluateToFirstDivisible(environment, args, output);
+	}
 }

@@ -1,6 +1,7 @@
 Internal workings:
 	AutoEvaluate within values: Store values that should be preEvaluated and preEvaluate before evaluation.
-	Finalize operations on collections.
+	Finalize operations on collections. (Should now work, but needs testing!)
+	Remove dependency on ReferenceValue
 	Programmed in help functions?
 
 Data files and scripts:

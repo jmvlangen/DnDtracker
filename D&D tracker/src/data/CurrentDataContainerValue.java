@@ -63,4 +63,34 @@ public class CurrentDataContainerValue implements ReferenceValue {
 	public boolean equals(Value other) {
 		return other instanceof CurrentDataContainerValue;
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment;
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.evaluateToFirstAddable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.evaluateToFirstSubtractible(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.evaluateToFirstMultiplicable(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return environment.evaluateToFirstDivisible(environment, args, output);
+	}
 }

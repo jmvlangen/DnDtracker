@@ -83,4 +83,44 @@ public class CompositeValue implements Value {
 		}
 		return true;
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		Value[] replacementArgs = new Value[this.args.length];
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		return value.evaluateToFirstDataContainer(environment, replacementArgs, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		Value[] replacementArgs = new Value[this.args.length];
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		return value.evaluateToFirstAddable(environment, replacementArgs, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		Value[] replacementArgs = new Value[this.args.length];
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		return value.evaluateToFirstSubtractible(environment, replacementArgs, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		Value[] replacementArgs = new Value[this.args.length];
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		return value.evaluateToFirstMultiplicable(environment, replacementArgs, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		Value[] replacementArgs = new Value[this.args.length];
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		return value.evaluateToFirstDivisible(environment, replacementArgs, output);
+	}
 }

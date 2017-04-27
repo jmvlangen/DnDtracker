@@ -141,4 +141,34 @@ public class DiceValue implements Value {
 		DiceValue o = (DiceValue) other;
 		return keepHighest == o.keepHighest && numberToKeep.equals(o.numberToKeep) && numberOfRolls.equals(o.numberOfRolls) && keepLowest == o.keepLowest && sizeOfDice.equals(o.sizeOfDice);
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' does not evaluate to a collection", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return evaluate(environment, args, output);
+	}
 }

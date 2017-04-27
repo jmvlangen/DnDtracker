@@ -44,11 +44,76 @@ public interface Value extends Comparable<Value> {
 	 * @param environment The DataContainer in which this Value object must be evaluated.
 	 * @param args Arguments that are given for evaluating this Value object.
 	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
-	 * @return A PrimitiveValue object that is the evaluation of this Value object.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
 	 * @throws EvaluationException if the evaluation did not succeed.
 	 * Every implementation of a Value object should specify for what reasons this may occur.
 	 */
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
+	
+	/**
+	 * Evaluates this Value object, but only until the first DataContainer object is reached.
+	 * This evaluation should function in the same way as evaluate() for all other purposes.
+	 * @param environment The DataContainer in which this Value object must be evaluated.
+	 * @param args Arguments that are given for evaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * This can occur for any reason evaluate() would give an exception,
+	 * but must also be thrown if no DataContainer was encountered in the evaluation.
+	 */
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
+	
+	/**
+	 * Evaluates this Value object, but only until the first Value object that can be part of an addition.
+	 * This evaluation should function in the same way as evaluate() for all other purposes.
+	 * @param environment The DataContainer in which this Value object must be evaluated.
+	 * @param args Arguments that are given for evaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * This can occur for any reason evaluate() would give an exception,
+	 * but must also be thrown if no Value object is encountered that can be part of an addition.
+	 */
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
+	
+	/**
+	 * Evaluates this Value object, but only until the first Value object that can be part of a subtraction.
+	 * This evaluation should function in the same way as evaluate() for all other purposes.
+	 * @param environment The DataContainer in which this Value object must be evaluated.
+	 * @param args Arguments that are given for evaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * This can occur for any reason evaluate() would give an exception,
+	 * but must also be thrown if no Value object is encountered that can be part of a subtraction.
+	 */
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
+	
+	/**
+	 * Evaluates this Value object, but only until the first Value object that can be part of a multiplication.
+	 * This evaluation should function in the same way as evaluate() for all other purposes.
+	 * @param environment The DataContainer in which this Value object must be evaluated.
+	 * @param args Arguments that are given for evaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * This can occur for any reason evaluate() would give an exception,
+	 * but must also be thrown if no Value object is encountered that can be part of a multiplication.
+	 */
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
+	
+	/**
+	 * Evaluates this Value object, but only until the first Value object that can be part of a division.
+	 * This evaluation should function in the same way as evaluate() for all other purposes.
+	 * @param environment The DataContainer in which this Value object must be evaluated.
+	 * @param args Arguments that are given for evaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A PrimitiveValue object that is an evaluation of this Value object.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * This can occur for any reason evaluate() would give an exception,
+	 * but must also be thrown if no Value object is encountered that can be part of a division.
+	 */
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
 	
 	/**
 	 * Gives a Value object in which all ArgumentValue objects in this Value object are replaced with the respective argument supplied in the array.

@@ -84,4 +84,54 @@ public class NamedValue implements ReferenceValue {
 	public boolean equals(Value other) {
 		return other instanceof NamedValue && ((NamedValue) other).name.equals(name);
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try{
+			return getReferencedValue(environment).evaluateToFirstDataContainer(environment, args, output);
+		} catch(DataException e){
+			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+		}
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try{
+			return getReferencedValue(environment).evaluateToFirstAddable(environment, args, output);
+		} catch(DataException e){
+			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+		}
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try{
+			return getReferencedValue(environment).evaluateToFirstSubtractible(environment, args, output);
+		} catch(DataException e){
+			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+		}
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try{
+			return getReferencedValue(environment).evaluateToFirstMultiplicable(environment, args, output);
+		} catch(DataException e){
+			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+		}
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try{
+			return getReferencedValue(environment).evaluateToFirstDivisible(environment, args, output);
+		} catch(DataException e){
+			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+		}
+	}
 }

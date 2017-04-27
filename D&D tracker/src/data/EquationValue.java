@@ -68,4 +68,34 @@ public class EquationValue implements Value{
 		EquationValue o = (EquationValue) other;
 		return a.equals(o.a) && b.equals(o.b);
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' does not evaluate to a collection", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a sum", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a subtraction", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a product", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a division", getTypeName()));
+	}
 }

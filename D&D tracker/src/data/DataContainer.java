@@ -431,4 +431,66 @@ public class DataContainer implements PrimitiveValue, Iterable<DataPair>, Refere
 	public boolean getBool() {
 		return true;
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return this;
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(containsName(ADDITION_NAME)) return this;
+		if(containsName(VALUE_NAME)){
+			try{
+				return getData(VALUE_NAME).getValue().evaluateToFirstAddable(this,args, output);
+			} catch(DataException e){
+				throw new EvaluationException(String.format("Can not evaluate, since: %s", e.getMessage()),e);
+			}
+		}
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of an addition.", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(containsName(SUBTRACTION_NAME)) return this;
+		if(containsName(VALUE_NAME)){
+			try{
+				return getData(VALUE_NAME).getValue().evaluateToFirstSubtractible(this,args, output);
+			} catch(DataException e){
+				throw new EvaluationException(String.format("Can not evaluate, since: %s", e.getMessage()),e);
+			}
+		}
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a subtraction.", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(containsName(PRODUCT_NAME)) return this;
+		if(containsName(VALUE_NAME)){
+			try{
+				return getData(VALUE_NAME).getValue().evaluateToFirstMultiplicable(this,args, output);
+			} catch(DataException e){
+				throw new EvaluationException(String.format("Can not evaluate, since: %s", e.getMessage()),e);
+			}
+		}
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a product.", getTypeName()));
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		if(containsName(DIVISION_NAME)) return this;
+		if(containsName(VALUE_NAME)){
+			try{
+				return getData(VALUE_NAME).getValue().evaluateToFirstDivisible(this,args, output);
+			} catch(DataException e){
+				throw new EvaluationException(String.format("Can not evaluate, since: %s", e.getMessage()),e);
+			}
+		}
+		throw new EvaluationException(String.format("A value of type \'%s\' can not be part of a division.", getTypeName()));
+	}
 }

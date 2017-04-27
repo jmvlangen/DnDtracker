@@ -131,4 +131,39 @@ public class SubVariableValue implements Value {
 		SubVariableValue o = (SubVariableValue) other;
 		return o.level == level && o.reference.equals(reference) && o.variable.equals(variable);
 	}
+
+	@Override
+	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		environment = getLocalEnvironment(environment);
+		return variable instanceof VoidValue ? environment : variable.evaluateToFirstDataContainer(environment,args,output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		environment = getLocalEnvironment(environment);
+		return variable instanceof VoidValue ? environment.evaluateToFirstAddable(environment, args, output) : variable.evaluateToFirstAddable(environment,args,output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		environment = getLocalEnvironment(environment);
+		return variable instanceof VoidValue ? environment.evaluateToFirstSubtractible(environment, args, output) : variable.evaluateToFirstSubtractible(environment,args,output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		environment = getLocalEnvironment(environment);
+		return variable instanceof VoidValue ? environment.evaluateToFirstMultiplicable(environment, args, output) : variable.evaluateToFirstMultiplicable(environment,args,output);
+	}
+
+	@Override
+	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		environment = getLocalEnvironment(environment);
+		return variable instanceof VoidValue ? environment.evaluateToFirstDivisible(environment, args, output) : variable.evaluateToFirstDivisible(environment,args,output);
+	}
 }
