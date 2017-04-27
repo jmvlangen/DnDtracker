@@ -108,44 +108,11 @@ public class LoadCommand extends CommandValue {
 	}
 
 	private void readDatFile(Scanner input, DataPair loadedData, ValueReader valueReader) throws EvaluationException {
-		input.useDelimiter("");
-		input.skip("\\s*");
+		input.useDelimiter("\\s");
 		try{
-			setDataPairToReadValue(input,loadedData,valueReader);
+			loadedData.setValue(valueReader.readValue(input));
 		} catch(ReadingException e){
 			throw new EvaluationException(String.format("Could not load, since: %s", e.getMessage()),e);
-		}
-	}
-
-	private void setDataPairToReadValue(Scanner input, DataPair loadedData, ValueReader valueReader) throws ReadingException, EvaluationException {
-		String s = readTypeIdentifier(input);
-		valueReader.readCharacter(input,'(');
-		if(s.equalsIgnoreCase(VARIABLE_NAME)) loadedData.setValue(valueReader.readValue(input));
-		else if(s.equalsIgnoreCase(DataContainer.DATA_TYPE_NAMES[0])) setDataPairToReadDataContainer(input,loadedData, valueReader);
-		else throw new ReadingException(String.format("Can not read variabled of type %s.",s));
-		input.skip("\\s*");
-		valueReader.readCharacter(input, ')');
-	}
-
-	private void setDataPairToReadDataContainer(Scanner input, DataPair loadedData, ValueReader valueReader) throws ReadingException, EvaluationException {
-		input.skip("\\s*");
-		DataContainer dataContainer = getContainer(loadedData);
-		while(!input.hasNext("\\)")){
-			String name = readName(input);
-			DataPair data;
-			try{
-				data = dataContainer.getDataAbsolute(name);
-			}
-			catch(DataException e){
-				try{
-					data = dataContainer.addData(name,new VoidValue());
-				} catch(DataException e1){
-					throw new EvaluationException(String.format("Can not load variable \'%s\' as it already exists in \'%s\'.",name,dataContainer.getPath()),e);
-				}
-			}
-			valueReader.readCharacter(input, ':');
-			setDataPairToReadValue(input, data, valueReader);
-			input.skip("\\s*");
 		}
 	}
 
@@ -156,20 +123,6 @@ public class LoadCommand extends CommandValue {
 		loadedData.setValue(result);
 		if(!(value instanceof VoidValue)) setValue(loadedData,value);
 		return result;
-	}
-
-	private String readName(Scanner input) throws ReadingException {
-		StringBuilder sb = new StringBuilder();
-		if(!input.hasNext("[a-zA-Z\\_]")) throw new ReadingException("Attempting to read a letter as the start of a name, but none found.");
-		sb.append(input.next());
-		while(input.hasNext("[a-zA-Z0-9]")) sb.append(input.next());
-		return sb.toString();
-	}
-
-	private String readTypeIdentifier(Scanner input) {
-		StringBuilder sb = new StringBuilder();
-		while(input.hasNext("[a-zA-Z]")) sb.append(input.next());
-		return sb.toString();
 	}
 
 	private DataPair createPathAndGetLowestDataPair(Value path, DataContainer environment) throws EvaluationException {

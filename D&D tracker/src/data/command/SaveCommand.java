@@ -3,6 +3,7 @@ package data.command;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Iterator;
 
 import data.DataContainer;
 import data.DataException;
@@ -77,28 +78,28 @@ public class SaveCommand extends CommandValue {
 
 	private void writeValue(Value value,FileWriter fileWriter,int level) throws IOException{
 		if(value instanceof DataContainer) writeDataContainer((DataContainer) value, fileWriter, level);
-		else writeVariable(value, fileWriter);
+		else writeNormalValue(value, fileWriter);
 	}
 	
 	private void writeDataContainer(DataContainer dataContainer, FileWriter fileWriter, int level) throws IOException{
-		fileWriter.append(DataContainer.DATA_TYPE_NAMES[0]).append("(\n");
-		for(DataPair d : dataContainer){
-			writeDataPair(d,fileWriter,level + 1);
+		fileWriter.append("{\n");
+		Iterator<DataPair> iterator = dataContainer.iterator();
+		while(iterator.hasNext()){
+			writeDataPair(iterator.next(),fileWriter,level + 1);
+			fileWriter.append(iterator.hasNext() ? " ,\n" : " }");
 		}
-		indentLevel(fileWriter,level);
-		fileWriter.append(")").append("\n");
 	}
 	
 	private void writeDataPair(DataPair data, FileWriter fileWriter, int level) throws IOException{
 		if(!(data instanceof Command)){
 			indentLevel(fileWriter,level);
-			fileWriter.append(data.getName()).append(":");
+			fileWriter.append(data.getName()).append(" = ");
 			writeValue(data.getValue(),fileWriter,level);
 		}
 	}
 	
-	private void writeVariable(Value value, FileWriter fileWriter) throws IOException{
-		fileWriter.append(VARIABLE_NAME).append("( ").append(value.toString()).append(" )\n");
+	private void writeNormalValue(Value value, FileWriter fileWriter) throws IOException{
+		fileWriter.append(value.toString());
 	}
 	
 	private void indentLevel(FileWriter fileWriter,int level) throws IOException{
