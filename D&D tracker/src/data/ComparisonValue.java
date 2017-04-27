@@ -6,20 +6,32 @@ package data;
  */
 import java.io.PrintStream;
 
-public class EquationValue implements Value{
-	public static final String[] VALUE_TYPE_NAMES = {"equation","equal"};
+public class ComparisonValue implements Value{
+	public static final String[] VALUE_TYPE_NAMES = {"comparison","compare"};
+	
+	public static final int LESS_THAN = -2;
+	public static final int LESS_THAN_OR_EQUAL = -1;
+	public static final int MORE_THAN = 2;
+	public static final int MORE_THAN_OR_EQUAL = 1;
+	public static final int EQUAL = 0;
 	
 	private Value a;
 	private Value b;
+	private int type;
 	
 	/**
 	 * Initializes this EquationValue object as the equation between two given Value objects.
 	 * @param a The first Value object.
 	 * @param b The second Value object.
 	 */
-	public EquationValue(Value a, Value b){
+	public ComparisonValue(Value a, Value b){
+		this(a,b,EQUAL);
+	}
+	
+	public ComparisonValue(Value a, Value b, int type){
 		this.a = a;
 		this.b = b;
+		this.type = type;
 	}
 
 	public String getTypeName() {
@@ -32,7 +44,7 @@ public class EquationValue implements Value{
 
 	@Override
 	public Value copy() {
-		return new EquationValue(a.copy(),b.copy());
+		return new ComparisonValue(a.copy(),b.copy());
 	}
 	
 	/**
@@ -41,17 +53,42 @@ public class EquationValue implements Value{
 	 */
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
-		return new BooleanValue(a.evaluate(environment, args, output).equals(b.evaluate(environment, args, output)));
+		switch(type){
+		case EQUAL:
+			return new BooleanValue(a.evaluate(environment, args, output).equals(b.evaluate(environment, args, output)));
+		case LESS_THAN:
+			return new BooleanValue(a.evaluate(environment, args, output).compareTo(b.evaluate(environment, args, output)) < 0);
+		case MORE_THAN:
+			return new BooleanValue(a.evaluate(environment, args, output).compareTo(b.evaluate(environment, args, output)) > 0);
+		case LESS_THAN_OR_EQUAL:
+			return new BooleanValue(a.evaluate(environment, args, output).compareTo(b.evaluate(environment, args, output)) <= 0);
+		case MORE_THAN_OR_EQUAL:
+			return new BooleanValue(a.evaluate(environment, args, output).compareTo(b.evaluate(environment, args, output)) >= 0);
+		default:
+			return new BooleanValue(a.evaluate(environment, args, output).compareTo(b.evaluate(environment, args, output)) == 0);
+		}
 	}
 	
 	public String toString(){
-		return String.format("(%s=%s)", a.toString(),b.toString());
+		switch(type){
+		case LESS_THAN:
+			return String.format("(%s < %s)", a.toString(),b.toString());
+		case MORE_THAN:
+			return String.format("(%s > %s)", a.toString(),b.toString());
+		case LESS_THAN_OR_EQUAL:
+			return String.format("(%s <= %s)", a.toString(),b.toString());
+		case MORE_THAN_OR_EQUAL:
+			return String.format("(%s >= %s)", a.toString(),b.toString());
+		case EQUAL:
+		default:
+			return String.format("(%s = %s)", a.toString(),b.toString());
+		}
 	}
 
 	@Override
 	public int compareTo(Value o) {
-		if(o instanceof EquationValue){
-			EquationValue other = (EquationValue) o;
+		if(o instanceof ComparisonValue){
+			ComparisonValue other = (ComparisonValue) o;
 			return a.compareTo(other.a);
 		}
 		return getTypeName().compareTo(o.getTypeName());
@@ -59,13 +96,13 @@ public class EquationValue implements Value{
 
 	@Override
 	public Value replaceArgumentsBy(Value[] args) {
-		return new EquationValue(a.replaceArgumentsBy(args),b.replaceArgumentsBy(args));
+		return new ComparisonValue(a.replaceArgumentsBy(args),b.replaceArgumentsBy(args));
 	}
 
 	@Override
 	public boolean equals(Value other) {
-		if(!(other instanceof EquationValue)) return false;
-		EquationValue o = (EquationValue) other;
+		if(!(other instanceof ComparisonValue)) return false;
+		ComparisonValue o = (ComparisonValue) other;
 		return a.equals(o.a) && b.equals(o.b);
 	}
 

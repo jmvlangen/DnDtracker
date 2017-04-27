@@ -14,7 +14,7 @@ import data.DataContainer;
 import data.DataException;
 import data.DiceValue;
 import data.DivisionValue;
-import data.EquationValue;
+import data.ComparisonValue;
 import data.EvaluationException;
 import data.GlobalValue;
 import data.IntValue;
@@ -64,7 +64,7 @@ public class ValueReader {
 		Value result = readSum(input);
 		if(input.hasNext("\\=")){
 			readCharacter(input, '=');
-			return new EquationValue(result,readSum(input));
+			return new ComparisonValue(result,readSum(input));
 		}
 		return result;
 	}
