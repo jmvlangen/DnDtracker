@@ -423,6 +423,20 @@ public class DataContainer implements PrimitiveValue, Iterable<DataPair>, Refere
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		try {
+			DataContainer result = new DataContainer();
+			for(DataPair data : this){
+				result.addData(data.getName(), data.getValue().getPreEvaluation(environment, args, output));
+			}
+			return result;
+		} catch (DataException e) {
+			throw new Error(String.format("Impossible Exception: %s", e.getMessage()),e);
+		}
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		return other instanceof DataContainer && dataSet.equals(((DataContainer) other).dataSet);
 	}

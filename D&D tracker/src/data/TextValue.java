@@ -170,4 +170,10 @@ public class TextValue implements PrimitiveValue{
 			throws EvaluationException {
 		throw new EvaluationException(String.format("Values of type \'%s\' can not be divided.",getTypeName()));
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }

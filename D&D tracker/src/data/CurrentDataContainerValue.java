@@ -93,4 +93,10 @@ public class CurrentDataContainerValue implements ReferenceValue {
 			throws EvaluationException {
 		return environment.evaluateToFirstDivisible(environment, args, output);
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }

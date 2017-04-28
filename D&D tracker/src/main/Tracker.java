@@ -54,14 +54,14 @@ public class Tracker {
 	public boolean dispatchLine(String line, PrintStream output){
 		Scanner lineScanner = new Scanner(line);
 		lineScanner.useDelimiter("\\s*");
-		ValueReader valueReader = new ValueReader(currentContainer,output);
+		ValueReader valueReader = new ValueReader();
 		if(lineScanner.hasNext()){
 			try{
-				Value value = valueReader.readValue(lineScanner);
+				Value value = valueReader.readValue(lineScanner).getPreEvaluation(currentContainer,  new Value[0], output);
 				List<Value> args = new ArrayList<Value>();
 				while(lineScanner.hasNext()){
 					if(lineScanner.hasNext("\\,")) valueReader.readCharacter(lineScanner,',');
-					args.add(valueReader.readValue(lineScanner));
+					args.add(valueReader.readValue(lineScanner).getPreEvaluation(currentContainer, new Value[0], output));
 				}
 				value = value.evaluate(currentContainer, args.toArray(new Value[args.size()]), output);
 				printValue(value,output);

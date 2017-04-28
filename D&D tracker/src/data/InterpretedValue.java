@@ -41,12 +41,12 @@ public class InterpretedValue implements ReferenceValue {
 
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluate(environment, args, output);
 	}
 	
 	private Value interpretMyValue(DataContainer environment) throws EvaluationException {
-		return interpretValue(value.evaluate(environment, new Value[0],Tracker.mainInstance.screen.getOutput()),new ValueReader(environment,Tracker.mainInstance.screen.getOutput()));
+		return interpretValue(value.evaluate(environment, new Value[0],Tracker.mainInstance.screen.getOutput()),new ValueReader());
 	}
 	
 	private Value interpretValue(PrimitiveValue value, ValueReader valueReader) throws EvaluationException {
@@ -124,6 +124,12 @@ public class InterpretedValue implements ReferenceValue {
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new InterpretedValue(value.getPreEvaluation(environment, args, output));
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		return other instanceof InterpretedValue && ((InterpretedValue) other).value.equals(value);
 	}
@@ -131,35 +137,35 @@ public class InterpretedValue implements ReferenceValue {
 	@Override
 	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluateToFirstDataContainer(environment, args, output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluateToFirstAddable(environment, args, output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluateToFirstSubtractible(environment, args, output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluateToFirstMultiplicable(environment, args, output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		ValueReader valueReader = new ValueReader(environment,output);
+		ValueReader valueReader = new ValueReader();
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluateToFirstDivisible(environment, args, output);
 	}
 

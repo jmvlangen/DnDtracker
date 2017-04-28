@@ -118,10 +118,24 @@ public interface Value extends Comparable<Value> {
 	/**
 	 * Gives a Value object in which all ArgumentValue objects in this Value object are replaced with the respective argument supplied in the array.
 	 * To make this method effective it should be passed on to all Value objects contained in this Value object.
+	 * Note that this should always return a copy of the original value, as replacing value objects might have unexpected behavior elsewhere otherwise.
 	 * @param args An array of Value objects.
 	 * @return A copy of this Value object in which all ArgumentValue objects are replaced with the respective argument supplied in the given array.
 	 */
 	public Value replaceArgumentsBy(Value[] args);
 	
 	public boolean equals(Value other);
+	
+	/**
+	 * Obtains the preEvaluated version of this value object, i.e. a Value object in which all occurences of PreEvaluatedValue are once pre-evaluated.
+	 * To make this method effective it should be passed on to all Value objects contained in this Value object.
+	 * Note that this should always return a copy of the original value, as replacing value objects might have unexpected behavior elsewhere otherwise.
+	 * @param environment The DataContainer in which this Value object must be preevaluated.
+	 * @param args Arguments that are given for preevaluating this Value object.
+	 * @param output A PrintStream object that can be used to print information to the user about the evaluation.
+	 * @return A Value object alike this one, but in which each Value object is replaced by its pre-evaluation once.
+	 * @throws EvaluationException if the evaluation did not succeed.
+	 * Every implementation of a Value object should specify for what reasons this may occur.
+	 */
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException;
 }

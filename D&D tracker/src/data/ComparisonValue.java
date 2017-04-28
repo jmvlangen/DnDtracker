@@ -100,6 +100,12 @@ public class ComparisonValue implements Value{
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new ComparisonValue(a.getPreEvaluation(environment, args, output),b.getPreEvaluation(environment, args, output));
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof ComparisonValue)) return false;
 		ComparisonValue o = (ComparisonValue) other;

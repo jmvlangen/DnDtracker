@@ -65,6 +65,12 @@ public class DivisionValue implements Value{
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new DivisionValue(a.getPreEvaluation(environment, args, output),b.getPreEvaluation(environment, args, output));
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof DivisionValue)) return false;
 		DivisionValue o = (DivisionValue) other;

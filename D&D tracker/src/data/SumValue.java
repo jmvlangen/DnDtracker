@@ -65,6 +65,12 @@ public class SumValue implements Value{
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new SumValue(a.getPreEvaluation(environment, args, output),b.getPreEvaluation(environment, args, output));
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof SumValue)) return false;
 		SumValue o = (SumValue) other;

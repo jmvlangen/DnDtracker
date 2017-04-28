@@ -1,6 +1,5 @@
 package main;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,18 +7,18 @@ import java.util.regex.Pattern;
 
 import data.ArgumentValue;
 import data.BooleanValue;
+import data.ComparisonValue;
 import data.CompositeValue;
 import data.CurrentDataContainerValue;
 import data.DataContainer;
 import data.DataException;
 import data.DiceValue;
 import data.DivisionValue;
-import data.ComparisonValue;
-import data.EvaluationException;
 import data.GlobalValue;
 import data.IntValue;
 import data.InterpretedValue;
 import data.NamedValue;
+import data.PreEvaluatedValue;
 import data.ProductValue;
 import data.ReferenceValue;
 import data.SubVariableValue;
@@ -37,12 +36,7 @@ public class ValueReader {
 	private static final char[] DICE_LOW_CHARACTERS = {'L','l'};
 	private static final char[] DICE_HIGH_CHARACTERS = {'H','h'};
 
-	private DataContainer evaluationEnvironment;
-	private PrintStream standardOutput;
-
-	public ValueReader(DataContainer evaluationEnvironment, PrintStream standardOutput){
-		this.evaluationEnvironment = evaluationEnvironment;
-		this.standardOutput = standardOutput;
+	public ValueReader(){
 	}
 
 	public Value readValue(String string) throws ReadingException {
@@ -168,7 +162,7 @@ public class ValueReader {
 
 	private Value readTerm(Scanner input) throws ReadingException {
 		if(input.hasNext("\\(")) return readBracketTerm(input);
-		if(input.hasNext("\\[")) return readEvaluatedTerm(input);
+		if(input.hasNext("\\[")) return readPreEvaluatedTerm(input);
 		if(input.hasNext("[0-9\\-]")) return readInteger(input);
 		if(input.hasNext("[a-zA-Z\\_]")) return readName(input);
 		if(input.hasNext("\\\"")) return readText(input);
@@ -290,15 +284,15 @@ public class ValueReader {
 		return result;
 	}
 
-	private Value readEvaluatedTerm(Scanner input) throws ReadingException {
-		readCharacter(input,'[');
-		Value unEvaluatedResult = readValue(input);
-		readCharacter(input,']');
-		try{
-			return unEvaluatedResult.evaluate(evaluationEnvironment, new Value[0], standardOutput);
-		} catch (EvaluationException e) {
-			throw new ReadingException(String.format("Could not read \'%s\', since: %s",unEvaluatedResult.toString(),e.getMessage()),e);
+	private Value readPreEvaluatedTerm(Scanner input) throws ReadingException {
+		int delay = 0;
+		while(input.hasNext("\\[")){
+			delay += 1;
+			readCharacter(input,'[');
 		}
+		Value unEvaluatedResult = readValue(input);
+		for(int i = 0; i < delay; i++) readCharacter(input,']');
+		return new PreEvaluatedValue(unEvaluatedResult,delay);
 	}
 
 	private IntValue readInteger(Scanner input) throws ReadingException {

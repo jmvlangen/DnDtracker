@@ -33,7 +33,6 @@ public class LoadCommand extends CommandValue {
 	private static final int MAX_EXTENSION_SIZE = 4;
 	private static final String LINE_PREFIX = "line";
 	private static final TextValue END_OF_LINE = new TextValue("\n");
-	private static final String VARIABLE_NAME = "variable";
 
 
 	@Override
@@ -47,7 +46,7 @@ public class LoadCommand extends CommandValue {
 			fileReader = new FileReader(fileName);
 			input = new Scanner(fileReader);
 			String extension = getExtension(fileName);
-			if(extension.equalsIgnoreCase("dat")) readDatFile(input,loadedData,new ValueReader(environment,output));
+			if(extension.equalsIgnoreCase("dat")) readDatFile(input,loadedData,new ValueReader());
 			else if(extension.equalsIgnoreCase("txt")) readTxtFile(input,loadedData);
 			else{
 				closeReaders(fileReader, input);

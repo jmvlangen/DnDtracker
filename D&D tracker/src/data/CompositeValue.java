@@ -42,7 +42,7 @@ public class CompositeValue implements Value {
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluate(environment, replacementArgs, output);
 	}
 
@@ -74,6 +74,14 @@ public class CompositeValue implements Value {
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		List<Value> replacementArgs = new ArrayList<Value>();
+		for(int i = 0; i < this.args.length; i++) replacementArgs.add(this.args[i].getPreEvaluation(environment, args, output));
+		return new CompositeValue(value.getPreEvaluation(environment, args, output),replacementArgs);
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof CompositeValue)) return false;
 		CompositeValue o = (CompositeValue) other;
@@ -88,7 +96,7 @@ public class CompositeValue implements Value {
 	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluateToFirstDataContainer(environment, replacementArgs, output);
 	}
 
@@ -96,7 +104,7 @@ public class CompositeValue implements Value {
 	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluateToFirstAddable(environment, replacementArgs, output);
 	}
 
@@ -104,7 +112,7 @@ public class CompositeValue implements Value {
 	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluateToFirstSubtractible(environment, replacementArgs, output);
 	}
 
@@ -112,7 +120,7 @@ public class CompositeValue implements Value {
 	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluateToFirstMultiplicable(environment, replacementArgs, output);
 	}
 
@@ -120,7 +128,7 @@ public class CompositeValue implements Value {
 	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
 		Value[] replacementArgs = new Value[this.args.length];
-		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args);
+		for(int i = 0; i < replacementArgs.length; i++) replacementArgs[i] = this.args[i].replaceArgumentsBy(args).getPreEvaluation(environment, replacementArgs, output);
 		return value.evaluateToFirstDivisible(environment, replacementArgs, output);
 	}
 }

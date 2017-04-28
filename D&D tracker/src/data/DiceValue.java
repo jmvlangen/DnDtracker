@@ -136,6 +136,13 @@ public class DiceValue implements Value {
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new DiceValue(numberOfRolls.getPreEvaluation(environment, args, output),sizeOfDice.getPreEvaluation(environment, args, output),keepLowest,keepHighest,numberToKeep.getPreEvaluation(environment, args, output));
+	}
+
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof DiceValue)) return false;
 		DiceValue o = (DiceValue) other;

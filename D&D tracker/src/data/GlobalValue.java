@@ -64,6 +64,12 @@ public class GlobalValue implements ReferenceValue {
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		return other instanceof GlobalValue;
 	}

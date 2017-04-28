@@ -126,6 +126,12 @@ public class SubVariableValue implements Value {
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new SubVariableValue((ReferenceValue) reference.getPreEvaluation(environment, args, output),variable.getPreEvaluation(environment, args, output),level);
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof SubVariableValue)) return false;
 		SubVariableValue o = (SubVariableValue) other;

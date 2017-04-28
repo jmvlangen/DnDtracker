@@ -74,4 +74,10 @@ public abstract class CommandValue implements Value {
 			throws EvaluationException {
 		return evaluate(environment, args, output);
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }

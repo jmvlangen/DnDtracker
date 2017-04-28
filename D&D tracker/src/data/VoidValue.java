@@ -123,4 +123,10 @@ public class VoidValue implements PrimitiveValue {
 			throws EvaluationException {
 		return this;
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }

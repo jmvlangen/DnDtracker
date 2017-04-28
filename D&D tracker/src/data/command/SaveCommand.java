@@ -25,7 +25,6 @@ public class SaveCommand extends CommandValue {
 	
 	public static final String TAB = "    ";
 	private static final int MAX_EXTENSION_SIZE = 4;
-	private static final String VARIABLE_NAME = "variable";
 
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {

@@ -65,6 +65,12 @@ public class SubtractionValue implements Value{
 	}
 
 	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return new SubtractionValue(a.getPreEvaluation(environment, args, output),b.getPreEvaluation(environment, args, output));
+	}
+
+	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof SubtractionValue)) return false;
 		SubtractionValue o = (SubtractionValue) other;

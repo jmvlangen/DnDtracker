@@ -93,4 +93,10 @@ public class ArgumentValue implements Value{
 		if(0 < number && number <= args.length) return args[number-1].evaluateToFirstDivisible(environment, args, output);
 		throw new EvaluationException(String.format("Argument \'%d\' does not exist",number));
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }

@@ -134,4 +134,10 @@ public class NamedValue implements ReferenceValue {
 			throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
 		}
 	}
+
+	@Override
+	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
+			throws EvaluationException {
+		return copy();
+	}
 }
