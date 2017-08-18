@@ -22,7 +22,7 @@ public class Path {
 	 * @param names An array of names.
 	 * A name should be a String starting with a letter or an underscore and furthermore only consisting of alpha-numerical characters.
 	 */
-	public Path(String[] names,DataContainer environment){
+	public Path(String[] names, DataContainer environment){
 		this.names = names;
 		this.environment = environment;
 	}
@@ -169,5 +169,9 @@ public class Path {
 	public String nameAt(int i) throws PathException{
 		if(i < 0 || i >= depth()) throw new PathException("Invalid index for path.");
 		return names[i];
+	}
+
+	public Path extend(Path subPath) {
+		return new Path(this, subPath.names);
 	}
 }

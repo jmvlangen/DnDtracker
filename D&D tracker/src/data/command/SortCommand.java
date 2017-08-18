@@ -12,7 +12,6 @@ import data.NamedValue;
 import data.Path;
 import data.PathException;
 import data.PrimitiveValue;
-import data.SubVariableValue;
 import data.Value;
 import data.VoidValue;
 
@@ -30,13 +29,20 @@ public class SortCommand extends CommandValue {
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
 		if(args.length < 1) throw new EvaluationException("The command \'sort\' needs at least one argument to work.");
-		DataContainer collectionToSort = getCollection(environment,args[0]);
-		String[] subNames;
-		if(args.length >= 2) subNames = getSubNames(args[1]);
-		else subNames = new String[0];
+		DataContainer collectionToSort = args[0].evaluateToFirstDataContainer(environment, args, output);
+		Path subPath;
+		if(args.length >= 2)
+			try {
+				subPath = Path.convertToPath(args[1], collectionToSort.getTopLevel().getPath());
+			} catch (PathException e) {
+				throw new EvaluationException(String.format("Can not evaluate, since %s",e.getMessage()),e);
+			}
+		else subPath = new Path(new String[0], collectionToSort);
 		List<DataPair> dataToSort = getVisibleDataInCollection(collectionToSort);
-		dataToSort.sort(new SortComparator(subNames));
+		dataToSort.sort(new SortComparator(subPath));
 		exportData(collectionToSort,dataToSort);
+		if(subPath.depth() > 0) output.printf("Collection \'%s\' sorted by \'%s\'.\n", collectionToSort.getPath().toString(), subPath.toString());
+		else output.printf("Collection \'%s\' sorted.\n", collectionToSort.getPath().toString());
 		return new VoidValue();
 	}
 
@@ -67,42 +73,6 @@ public class SortCommand extends CommandValue {
 			if(data.getName().charAt(0) != '_') result.add(data);
 		}
 		return result;
-	}
-
-	private String[] getSubNames(Value value) throws EvaluationException {
-		List<String> result = getSubNamesList(value);
-		return result.toArray(new String[result.size()]);
-	}
-
-	private List<String> getSubNamesList(Value value) throws EvaluationException {
-		if(value instanceof NamedValue) return getSubNamesListFromNamedValue((NamedValue) value);
-		if(value instanceof SubVariableValue) return getSubNamesListFromSubVariableValue((SubVariableValue) value);
-		if(value instanceof VoidValue) return new ArrayList<String>();
-		throw new EvaluationException(String.format("Can not use \'%s\' as a criterium to sort by.", value.toString()));
-	}
-
-	private List<String> getSubNamesListFromSubVariableValue(SubVariableValue value) throws EvaluationException {
-		List<String> list1 = getSubNamesList(value.getReference());
-		List<String> list2 = getSubNamesList(value.getSubValue());
-		list1.addAll(list2);
-		return list1;
-	}
-
-	private List<String> getSubNamesListFromNamedValue(NamedValue value) {
-		List<String> result = new ArrayList<String>();
-		result.add(value.toString());
-		return result;
-	}
-
-	private DataContainer getCollection(DataContainer environment, Value value) throws EvaluationException {
-		try{
-			Path path = Path.convertToPath(value, environment.getPath());
-			Value val2 = path.getLowestValue();
-			if(val2 instanceof DataContainer) return (DataContainer) value;
-			throw new EvaluationException(String.format("The variable \'%s\' did not contain a %s.", path.toString(),DataContainer.DATA_TYPE_NAMES[0]));
-		} catch(DataException|PathException e){
-			throw new EvaluationException(String.format("Could not evaluate, since: %s.",e.getMessage()),e);
-		}
 	}
 
 	@Override

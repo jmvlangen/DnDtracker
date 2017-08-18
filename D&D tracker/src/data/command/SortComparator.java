@@ -9,15 +9,19 @@ import data.Value;
 import data.VoidValue;
 
 public class SortComparator implements Comparator<DataPair> {
-	private String[] subNames;
+	private Path subPath;
 	
-	public SortComparator(String[] subNames){
-		this.subNames = subNames;
+	public SortComparator(Path subPath){
+		this.subPath = subPath;
 	}
 
 	@Override
 	public int compare(DataPair data1, DataPair data2) {
-		return getCorrespondingValue(new Path(data1.getPath(),subNames)).compareTo(getCorrespondingValue( new Path(data2.getPath(),subNames)));
+		return getCompareValue(data1).compareTo(getCompareValue(data2));
+	}
+	
+	private Value getCompareValue(DataPair data) {
+		return getCorrespondingValue(data.getPath().extend(subPath));
 	}
 
 	private Value getCorrespondingValue(Path path) {

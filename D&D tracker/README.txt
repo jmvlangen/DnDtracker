@@ -489,6 +489,27 @@ value or a boolean value false, the second argument will be ignored and the thir
 argument will be evaluated if given. Note that in all cases the if command always
 evaluates to a void value.
 
+----ii) Sort----------------------------------------------------------------------------
+The sort command sorts a collection by a given path. The first argument to the sort
+command must be or evaluate to a collection. The optional second argument must be a
+path (see section 3d). When evaluated with at least one argument, the sort command
+attempts to sort the non-hidden variables (see section 3a) in the collection by
+comparing their values. The end result will be hidden variables named _n where n is an
+integer ranging from 1 up to the number of non-hidden variables in the collection, where
+each one contains as a value the name of a non-hidden variable. The names are ordered
+in such a way such that the variable referred to by _1 has the smallest value and the
+variable referred to by _n for the highest n has the highest value.
+
+If the optional second argument was specified, the sorting will happen by looking at
+the values at the end of the path to each variable extended by the path given as the
+second argument. For example, if we sort the collection C with variables a, b and c in
+it using the command
+	sort C by.val
+then the sort command will compare the evaluations of C.a.by.val, C.b.by.val and
+C.c.by.val and sort a, b and c according to these values as mentioned before. Note that
+if one or more of the variables in these longer paths do not exist, they will be
+assumed to be void values, which can lead to unpredictable sorting behavior.
+
 --6) Special operations-----------------------------------------------------------------
 Besides the standard operations described in section 1b) there are some operations that
 can be used for advanced usage. These operations are described in this section.
@@ -512,7 +533,7 @@ and the output on screen might for example be
 	3
 
 ---b) Values defined by primitive values------------------------------------------------
-There could be possible situations in which you want to write down a fixed value,
+There could be possible situations in which you don't want to write down a fixed value,
 but rather a value defined by the evaluation of some other value. The program has a way
 to convert certain primitive values into values. This can be done by surrounding a value
 by the symbols < and > .
