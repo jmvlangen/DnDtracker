@@ -32,6 +32,15 @@ public class DataPair {
 	}
 	
 	/**
+	 * Returns whether this DataPair is hidden.
+	 * @return TRUE - if this DataPair is hidden.
+	 *         FALSE - otherwise
+	 */
+	public boolean isHidden(){
+		return name.startsWith("_");
+	}
+	
+	/**
 	 * Returns the path of this DataPair.
 	 * @return new Path(getHost().getPath(),getName());
 	 */

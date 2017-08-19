@@ -510,6 +510,34 @@ C.c.by.val and sort a, b and c according to these values as mentioned before. No
 if one or more of the variables in these longer paths do not exist, they will be
 assumed to be void values, which can lead to unpredictable sorting behavior.
 
+----iii) While--------------------------------------------------------------------------
+The while command evaluates a value as long as another value evaluates to true. The
+while command requires two arguments. The first argument will be called the condition,
+whilst the second argument will be called the code. When the while command is evaluated
+it will first evaluate the condition. If the condition evaluates to anything but a 
+void value or the boolean value false, the while command will then evaluate the code.
+This proces will repeat until the condition evaluates to a void value or the boolean
+value false.
+
+As an example the following input will raise the value of a by one at a time until it
+is equal to 3
+	set a 0
+	while (i < 3) set(i,[[i+1]])
+
+Note that to prevend endless loops, there is a cap on the maximum amount of evaluations
+that the while command can do.
+
+----iv) For-----------------------------------------------------------------------------
+The for command evaluates a value for every variable in a collection. The for command
+requires at least two arguments. The first argument should evaluate to a collection.
+When the for command is evaluated, the for command will evaluate the second argument
+once for each variable in the collection given by the first argument. In each evaluation
+of the second argument a path to the respective variable is passed along as the first
+argument.
+
+Note that the for command does not consider hidden variable, unless the optional third
+argument is given and evaluates to anything but a void value or the boolean value false.
+
 --6) Special operations-----------------------------------------------------------------
 Besides the standard operations described in section 1b) there are some operations that
 can be used for advanced usage. These operations are described in this section.

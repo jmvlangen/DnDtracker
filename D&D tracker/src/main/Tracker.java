@@ -18,6 +18,7 @@ import data.command.CommandValue;
 import data.command.CopyCommand;
 import data.command.CreateCommand;
 import data.command.EnvironmentCommand;
+import data.command.ForCommand;
 import data.command.IfCommand;
 import data.command.ListCommand;
 import data.command.LoadCommand;
@@ -31,6 +32,7 @@ import data.command.SetCommand;
 import data.command.SortCommand;
 import data.command.TextCommand;
 import data.command.VoidCommand;
+import data.command.WhileCommand;
 
 public class Tracker {
 	public static Tracker mainInstance;
@@ -138,6 +140,8 @@ public class Tracker {
 		loadCommand(new VoidCommand(),output);
 		loadCommand(new IfCommand(),output);
 		loadCommand(new RunCommand(),output);
+		loadCommand(new WhileCommand(),output);
+		loadCommand(new ForCommand(),output);
 	}
 	
 	private void loadCommand(CommandValue value, PrintStream output){

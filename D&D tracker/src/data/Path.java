@@ -145,6 +145,16 @@ public class Path {
 			dataPair.setValue(value);
 		}
 	}
+	
+	/** 
+	 * @return a Value object that will produce this Path when passed as the first argument to the convertToPath method.
+	 * Note that this does not contain information about the DataContainer this Path lives in.
+	 */
+	public Value toValue(){
+		Value result = new GlobalValue();
+		for(int i = 0; i < depth(); i++) result = new SubVariableValue(result, new NamedValue(names[i]));
+		return result;
+	}
 
 	public String toString(){
 		StringBuilder sb = new StringBuilder();

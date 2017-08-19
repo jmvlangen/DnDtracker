@@ -9,7 +9,7 @@ import main.Tracker;
 
 /**
  * A Value object that can contain other Value objects inside DataPairs.
- * As a PrimitiveValue object it operates according to hidden variables which names are given ADDITION_NAME, PRODUCT_NAME, DIVISION_NAME and SUBTRACTION_NAME.
+ * As a PrimitiveValue object it operates according to hidden variables which names are given by ADDITION_NAME, PRODUCT_NAME, DIVISION_NAME and SUBTRACTION_NAME.
  * Furthermore its type, value, and toString method can be modified by the variables with names given by TYPE_NAME, VALUE_NAME and TO_STRING_NAME respectively.
  * As a ReferenceValue it refers to itself only.
  */
