@@ -1,6 +1,5 @@
 Internal workings:
 	Finalize operations on collections. (Should now work, but needs testing!)
-	Remove dependency on ReferenceValue
 	Programmed in help functions?
 
 Data files and scripts:

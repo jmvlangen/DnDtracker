@@ -3,12 +3,9 @@ package data.command;
 import java.io.PrintStream;
 
 import data.DataContainer;
-import data.DataException;
 import data.DataPair;
 import data.EvaluationException;
 import data.PrimitiveValue;
-import data.ReferenceValue;
-import data.SubVariableValue;
 import data.Value;
 import data.VoidValue;
 
@@ -19,29 +16,9 @@ public class ListCommand extends CommandValue{
 
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
-		if(args.length >= 1) environment = getDataContainer(args[0],environment);
+		if(args.length >= 1) environment = args[0].evaluateToFirstDataContainer(environment, new Value[0], output);
 		printDataContainer(environment,0,output,args.length >= 2 ? args[1].evaluate(environment, new VoidValue[0], output).getBool() : false , args.length >= 3 ? args[2].evaluate(environment, new VoidValue[0], output).getBool() : false);
 		return new VoidValue();
-	}
-
-	private DataContainer getDataContainer(Value value, DataContainer environment) throws EvaluationException{
-		if(value instanceof DataContainer) return (DataContainer) value;
-		if(value instanceof ReferenceValue) return getDataContainerFromReference((ReferenceValue) value, environment);
-		if(value instanceof SubVariableValue) return getDataContainerFromSubVariableValue((SubVariableValue) value, environment);
-		else throw new EvaluationException(String.format("Variables of type %s have no subvariables.", value.getTypeName()));
-	}
-
-	private DataContainer getDataContainerFromSubVariableValue(SubVariableValue value, DataContainer environment) throws EvaluationException {
-		return getDataContainer(value.getSubValue(),value.getLocalEnvironment(environment));
-	}
-
-	private DataContainer getDataContainerFromReference(ReferenceValue reference, DataContainer environment) throws EvaluationException{
-		try{
-			Value value = reference.getReferencedValue(environment);
-			return getDataContainer(value,reference.getLevelAboveReferencedValue(environment));
-		} catch(DataException e){
-			throw new EvaluationException(String.format("Can not evaluate, since: %s", e.getMessage()),e);
-		}
 	}
 
 	private void printDataContainer(DataContainer environment, int level, PrintStream output, boolean printSubDataContainers, boolean printHiddenDataPairs) {

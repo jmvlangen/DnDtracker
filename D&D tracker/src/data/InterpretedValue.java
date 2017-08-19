@@ -3,7 +3,6 @@ package data;
 import java.io.PrintStream;
 
 import main.ReadingException;
-import main.Tracker;
 import main.ValueReader;
 
 /**
@@ -13,7 +12,7 @@ import main.ValueReader;
  * Read it as if it is input, if it is a TextValue object.
  * Throw errors in other cases.
  */
-public class InterpretedValue implements ReferenceValue {
+public class InterpretedValue implements Value {
 	public static final String[] VALUE_TYPE_NAMES = {"interpretation"};
 	
 	private Value value;
@@ -45,10 +44,6 @@ public class InterpretedValue implements ReferenceValue {
 		return interpretValue(value.evaluate(environment,args,output),valueReader).evaluate(environment, args, output);
 	}
 	
-	private Value interpretMyValue(DataContainer environment) throws EvaluationException {
-		return interpretValue(value.evaluate(environment, new Value[0],Tracker.mainInstance.screen.getOutput()),new ValueReader());
-	}
-	
 	private Value interpretValue(PrimitiveValue value, ValueReader valueReader) throws EvaluationException {
 		if(value instanceof IntValue) return interpretIntValue((IntValue) value);
 		if(value instanceof TextValue) return interpretTextValue((TextValue) value, valueReader);
@@ -73,44 +68,6 @@ public class InterpretedValue implements ReferenceValue {
 			return value.compareTo(((InterpretedValue) o).value);
 		} else{
 			return getTypeName().compareTo(o.getTypeName());
-		}
-	}
-
-	@Override
-	public Value getReferencedValue(DataContainer environment) throws DataException {
-		try {
-			Value result = interpretMyValue(environment);
-			if(result instanceof ReferenceValue) return ((ReferenceValue) result).getReferencedValue(environment);
-			return result;
-		} catch (EvaluationException e) {
-			throw new DataException(String.format("Interpretation of \'%s\' does not reference a value, since: %s", value.toString(), e.getMessage()),e);
-		}
-	}
-
-	@Override
-	public Path getReferencedPath(DataContainer environment) throws DataException {
-		try {
-			Value result = interpretMyValue(environment);
-			if(result instanceof ReferenceValue) return ((ReferenceValue) result).getReferencedPath(environment);
-			throw new DataException(String.format("The interpretation \'%s\' of \'%s\' is not a reference.", result.toString(), value.toString()));
-		} catch (EvaluationException e) {
-			throw new DataException(String.format("Interpretation of \'%s\' does not reference a value, since: %s", value.toString(), e.getMessage()),e);
-		}
-	}
-
-	@Override
-	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
-		return environment;
-	}
-
-	@Override
-	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
-		try {
-			Value result = interpretMyValue(environment);
-			if(result instanceof ReferenceValue) return ((ReferenceValue) result).getReferencedDataPair(environment);
-			throw new DataException(String.format("The interpretation \'%s\' of \'%s\' is not a reference.", result.toString(), value.toString()));
-		} catch (EvaluationException e) {
-			throw new DataException(String.format("Interpretation of \'%s\' does not reference a value, since: %s", value.toString(), e.getMessage()),e);
 		}
 	}
 	

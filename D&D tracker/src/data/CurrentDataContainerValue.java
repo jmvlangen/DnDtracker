@@ -2,7 +2,7 @@ package data;
 
 import java.io.PrintStream;
 
-public class CurrentDataContainerValue implements ReferenceValue {
+public class CurrentDataContainerValue implements Value {
 	public static final String[] VALUE_TYPE_NAMES = {"currentEnvironment","current","local"};
 
 	public String getTypeName() {
@@ -24,34 +24,14 @@ public class CurrentDataContainerValue implements ReferenceValue {
 		return environment.evaluate(environment, args, output);
 	}
 
-	@Override
-	public Value getReferencedValue(DataContainer environment) throws DataException {
-		return environment;
-	}
-
-	@Override
-	public Path getReferencedPath(DataContainer environment) throws DataException {
-		return environment.getPath();
-	}
-
 	public String toString(){
 		return "%";
-	}
-
-	@Override
-	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
-		return environment.getLevelAbove();
 	}
 
 	@Override
 	public int compareTo(Value o) {
 		if(o instanceof CurrentDataContainerValue) return 0;
 		return getTypeName().compareTo(o.getTypeName());
-	}
-
-	@Override
-	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
-		return environment.getHost();
 	}
 
 	@Override

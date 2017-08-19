@@ -68,7 +68,7 @@ public class Path {
 		if(value instanceof DataContainer) return ((DataContainer) value).getPath();
 		if(value instanceof SubVariableValue){
 			SubVariableValue subValue = (SubVariableValue) value;
-			withinPath = convertToPath(subValue.getReference(),withinPath);
+			withinPath = convertToPath(subValue.getTopValue(),withinPath);
 			return convertToPath(subValue.getSubValue(),withinPath.subPath(withinPath.depth()-subValue.getLevel()));
 		}
 		throw new PathException(String.format("Can not make a path from arguments of type \'%s\'", value.getTypeName()));

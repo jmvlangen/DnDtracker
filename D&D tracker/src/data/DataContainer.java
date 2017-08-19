@@ -13,7 +13,7 @@ import main.Tracker;
  * Furthermore its type, value, and toString method can be modified by the variables with names given by TYPE_NAME, VALUE_NAME and TO_STRING_NAME respectively.
  * As a ReferenceValue it refers to itself only.
  */
-public class DataContainer implements PrimitiveValue, Iterable<DataPair>, ReferenceValue {
+public class DataContainer implements PrimitiveValue, Iterable<DataPair> {
 	public static final String VALUE_NAME = "_value";
 	public static final String TYPE_NAME = "_type";
 	public static final String ADDITION_NAME = "_add";
@@ -387,26 +387,6 @@ public class DataContainer implements PrimitiveValue, Iterable<DataPair>, Refere
 	public DataPair getHost() throws DataException {
 		if(isTopLevel()) throw new DataException("A top level DataContainer is not part of a DataPair.");
 		return host;
-	}
-
-	@Override
-	public Value getReferencedValue(DataContainer environment) throws DataException {
-		return this;
-	}
-
-	@Override
-	public Path getReferencedPath(DataContainer environment) throws DataException {
-		return getPath();
-	}
-
-	@Override
-	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
-		return getLevelAbove();
-	}
-
-	@Override
-	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
-		return getHost();
 	}
 
 	@Override

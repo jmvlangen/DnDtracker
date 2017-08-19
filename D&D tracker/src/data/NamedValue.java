@@ -2,7 +2,7 @@ package data;
 
 import java.io.PrintStream;
 
-public class NamedValue implements ReferenceValue {
+public class NamedValue implements Value {
 	public static final String[] VALUE_TYPE_NAMES = {"variable","var"};
 	
 	private final String name;
@@ -44,19 +44,12 @@ public class NamedValue implements ReferenceValue {
 		return name;
 	}
 
-	@Override
 	public Value getReferencedValue(DataContainer environment) throws DataException {
 		return getReferencedDataPair(environment).getValue();
 	}
 
-	@Override
 	public Path getReferencedPath(DataContainer environment) {
 		return new Path(environment.getPath(),name);
-	}
-
-	@Override
-	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
-		return environment;
 	}
 
 	@Override
@@ -68,7 +61,6 @@ public class NamedValue implements ReferenceValue {
 		return getTypeName().compareTo(o.getTypeName());
 	}
 
-	@Override
 	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
 		DataPair data = environment.getData(name);
 		if(data == null) throw new DataException(String.format("No variable %s exists in %s.",name,environment.getPath()));

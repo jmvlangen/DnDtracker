@@ -20,7 +20,6 @@ import data.InterpretedValue;
 import data.NamedValue;
 import data.PreEvaluatedValue;
 import data.ProductValue;
-import data.ReferenceValue;
 import data.SubVariableValue;
 import data.SubtractionValue;
 import data.SumValue;
@@ -125,7 +124,6 @@ public class ValueReader {
 		Pattern oldDelimiter = input.delimiter();
 		input.useDelimiter("");
 		if(isGlobal || input.hasNext("\\.")){
-			if(!(result instanceof ReferenceValue)) throw new ReadingException(String.format("Can not access subvariables of \'%s\'.",result.toString()));
 			if(!isGlobal) readCharacter(input, '.');
 			int level = 0;
 			while(input.hasNext("\\.")){
@@ -134,10 +132,10 @@ public class ValueReader {
 			}
 			if(input.hasNext("\\s") || !input.hasNext()){
 				input.useDelimiter(oldDelimiter);
-				return new SubVariableValue((ReferenceValue) result, level);
+				return new SubVariableValue(result, level);
 			}
 			input.useDelimiter(oldDelimiter);
-			return new SubVariableValue((ReferenceValue) result,readSubValueTree(input),level);
+			return new SubVariableValue(result,readSubValueTree(input),level);
 		}
 		input.useDelimiter(oldDelimiter);
 		return result;

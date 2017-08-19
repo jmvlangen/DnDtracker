@@ -9,42 +9,42 @@ import java.io.PrintStream;
 public class SubVariableValue implements Value {
 	public static final String[] VALUE_TYPE_NAMES = {"subvariable","subvar"};
 	
-	private ReferenceValue reference;
-	private Value variable;
+	private Value value;
+	private Value subValue;
 	private int level;
 	
 	/**
 	 * A constructor for the SubVariableValue.
-	 * @param reference A ReferencedValue object of which the referenced Value should be the DataContainer in which we want to evaluate the Value variable.
-	 * @param variable A Value object that we want to perceive relative to the referenced Value object.
+	 * @param value A Value object which evaluates to a DataContainer in which we want to evaluate the Value subValue.
+	 * @param subValue A Value object that we want to perceive relative to the first Value object.
 	 * @param level A non-negative integer which indicates the level (upwards) at which this Value object should live.
-	 * For example 0 indicates that this Value should be evaluated within the referenced Value,
+	 * For example 0 indicates that this Value should be evaluated within the DataContainer that follows from value,
 	 * 1 indicates it should be evaluated within the DataContainer above that,
 	 * 2 indicates it should be evaluated within the DataContainer above that, etc.
 	 * Note that this never goes higher than the top level.
 	 */
-	public SubVariableValue(ReferenceValue reference, Value variable, int level){
-		this.reference = reference;
-		this.variable = variable;
+	public SubVariableValue(Value value, Value subValue, int level){
+		this.value = value;
+		this.subValue = subValue;
 		this.level = level;
 	}
 	
 	/**
-	 * A constructor for the SubVariableValue that refers only to a variable relative to a given reference.
-	 * @param reference A ReferencedValue object.
-	 * @param level The relative level of the variable relative to the referenced value of the first parameter.
+	 * A constructor for the SubVariableValue that refers only to a sub value relative to a given Value.
+	 * @param value A Value object.
+	 * @param level The relative level of the sub value relative to the value of the first parameter.
 	 */
-	public SubVariableValue(ReferenceValue reference, int level){
-		this(reference,new VoidValue(),level);
+	public SubVariableValue(Value value, int level){
+		this(value,new VoidValue(),level);
 	}
 	
 	/**
 	 * A constructor for the SubVariableValue.
-	 * @param reference A ReferencedValue object of which the referenced Value should be the DataContainer in which we want to evaluate the Value variable.
-	 * @param variable A Value object that we want to perceive relative to the referenced Value object.
+	 * @param value A Value object which evaluates to a DataContainer in which we want to evaluate the Value subValue.
+	 * @param subValue A Value object that we want to perceive relative to the first Value object.
 	 */
-	public SubVariableValue(ReferenceValue reference, Value variable){
-		this(reference,variable,0);
+	public SubVariableValue(Value value, Value subValue){
+		this(value,subValue,0);
 	}
 
 	public String getTypeName() {
@@ -57,22 +57,22 @@ public class SubVariableValue implements Value {
 
 	@Override
 	public Value copy() {
-		return new SubVariableValue((ReferenceValue) reference.copy(),variable.copy(),level);
+		return new SubVariableValue(value.copy(),subValue.copy(),level);
 	}
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append(reference.toString());
-		if(reference instanceof GlobalValue) return sb.append(variable.toString()).toString();
+		sb.append(value.toString());
+		if(value instanceof GlobalValue) return sb.append(subValue.toString()).toString();
 		for(int i = 0 ; i <= level ; i++) sb.append(".");
-		if(!(variable instanceof VoidValue)) sb.append(variable.toString());
+		if(!(subValue instanceof VoidValue)) sb.append(subValue.toString());
 		return sb.toString();
 	}
 
 	@Override
 	public PrimitiveValue evaluate(DataContainer environment, Value[] args, PrintStream output) throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment.evaluate(environment, args, output) : variable.evaluate(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment.evaluate(environment, args, output) : subValue.evaluate(environment,args,output);
 	}
 	
 	/**
@@ -83,93 +83,83 @@ public class SubVariableValue implements Value {
 	 * - The ReferenceValue object does not refer to a Value in the globalEnvironment DataContainer.
 	 * - The Value object which should be the local environment is not a DataContainer.
 	 */
-	public DataContainer getLocalEnvironment(DataContainer globalEnvironment) throws EvaluationException {
-		try{
-			if(level == 0){
-				Value value = reference.getReferencedValue(globalEnvironment);
-				if(!(value instanceof DataContainer)) throw new EvaluationException(String.format("The variable \'%s\' contains no subvariables", reference.getReferencedPath(globalEnvironment)));
-				return (DataContainer) value;
-			} else {
-				DataContainer localEnvironment = reference.getLevelAboveReferencedValue(globalEnvironment);
-				for(int i = 1;i < level;i++) localEnvironment = localEnvironment.getLevelAbove();
-				return localEnvironment;
-			}			
-		} catch(DataException e){
-			throw new EvaluationException(String.format("Could not evaluate, since: %s", e.getMessage()),e);
-		}
+	public DataContainer getLocalEnvironment(DataContainer globalEnvironment, Value[] args, PrintStream output) throws EvaluationException {
+		DataContainer localEnvironment = value.evaluateToFirstDataContainer(globalEnvironment, args, output);
+		for(int i = 1;i < level;i++) localEnvironment = localEnvironment.getLevelAbove();
+		return localEnvironment;		
 	}
 
 	public int getLevel(){
 		return level;
 	}
 	
-	public ReferenceValue getReference(){
-		return reference;
+	public Value getTopValue(){
+		return value;
 	}
 	
 	public Value getSubValue(){
-		return variable;
+		return subValue;
 	}
 
 	@Override
 	public int compareTo(Value o) {
 		if(o instanceof SubVariableValue){
 			SubVariableValue other = (SubVariableValue) o;
-			return reference.compareTo(other.reference);
+			return value.compareTo(other.value);
 		}
 		return getTypeName().compareTo(o.getTypeName());
 	}
 
 	@Override
 	public Value replaceArgumentsBy(Value[] args) {
-		return new SubVariableValue((ReferenceValue) reference.replaceArgumentsBy(args),variable.replaceArgumentsBy(args),level);
+		return new SubVariableValue(value.replaceArgumentsBy(args),subValue.replaceArgumentsBy(args),level);
 	}
 
 	@Override
 	public Value getPreEvaluation(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		return new SubVariableValue((ReferenceValue) reference.getPreEvaluation(environment, args, output),variable.getPreEvaluation(environment, args, output),level);
+		return new SubVariableValue(value.getPreEvaluation(environment, args, output),subValue.getPreEvaluation(environment, args, output),level);
 	}
 
 	@Override
 	public boolean equals(Value other) {
 		if(!(other instanceof SubVariableValue)) return false;
 		SubVariableValue o = (SubVariableValue) other;
-		return o.level == level && o.reference.equals(reference) && o.variable.equals(variable);
+		return o.level == level && o.value.equals(value) && o.subValue.equals(subValue);
 	}
 
 	@Override
 	public DataContainer evaluateToFirstDataContainer(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment : variable.evaluateToFirstDataContainer(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment : subValue.evaluateToFirstDataContainer(environment,args,output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstAddable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment.evaluateToFirstAddable(environment, args, output) : variable.evaluateToFirstAddable(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment.evaluateToFirstAddable(environment, args, output) : subValue.evaluateToFirstAddable(environment,args,output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstSubtractible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment.evaluateToFirstSubtractible(environment, args, output) : variable.evaluateToFirstSubtractible(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment.evaluateToFirstSubtractible(environment, args, output) : subValue.evaluateToFirstSubtractible(environment,args,output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstMultiplicable(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment.evaluateToFirstMultiplicable(environment, args, output) : variable.evaluateToFirstMultiplicable(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment.evaluateToFirstMultiplicable(environment, args, output) : subValue.evaluateToFirstMultiplicable(environment,args,output);
 	}
 
 	@Override
 	public PrimitiveValue evaluateToFirstDivisible(DataContainer environment, Value[] args, PrintStream output)
 			throws EvaluationException {
-		environment = getLocalEnvironment(environment);
-		return variable instanceof VoidValue ? environment.evaluateToFirstDivisible(environment, args, output) : variable.evaluateToFirstDivisible(environment,args,output);
+		environment = getLocalEnvironment(environment, args, output);
+		return subValue instanceof VoidValue ? environment.evaluateToFirstDivisible(environment, args, output) : subValue.evaluateToFirstDivisible(environment,args,output);
 	}
 }

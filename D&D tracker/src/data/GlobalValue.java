@@ -5,7 +5,7 @@ import java.io.PrintStream;
 /**
  * A ReferenceValue object that refers to the top most DataContainer in a given environment.
  */
-public class GlobalValue implements ReferenceValue {
+public class GlobalValue implements Value {
 	public static final String[] VALUE_TYPE_NAMES = {"global","all"};
 
 	@Override
@@ -29,29 +29,9 @@ public class GlobalValue implements ReferenceValue {
 	}
 
 	@Override
-	public Value getReferencedValue(DataContainer environment) throws DataException {
-		return environment.getTopLevel();
-	}
-
-	@Override
-	public Path getReferencedPath(DataContainer environment) throws DataException {
-		return new Path(environment);
-	}
-
-	@Override
-	public DataContainer getLevelAboveReferencedValue(DataContainer environment) {
-		return environment.getTopLevel();
-	}
-
-	@Override
 	public int compareTo(Value o) {
 		if(o instanceof GlobalValue) return 0;
 		return getTypeName().compareTo(o.getTypeName());
-	}
-
-	@Override
-	public DataPair getReferencedDataPair(DataContainer environment) throws DataException {
-		throw new DataException("The top level DataContainer is not part of a DataPair.");
 	}
 
 	public String toString(){
