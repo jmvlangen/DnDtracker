@@ -35,7 +35,7 @@ public class LoadCommand extends CommandValue {
 		if(args.length < 2) throw new EvaluationException(String.format("The command \'load\' needs at least two arguments to work: %s",USAGE_DESCRIPTION));
 		Path loadPath;
 		try {
-			loadPath = Path.convertToPath(args[0], environment.getPath());
+			loadPath = Path.convertToPath(args[1], environment.getPath());
 		} catch (PathException e) {
 			throw new EvaluationException(String.format("Could not load data, since %s",e.getMessage()),e);
 		}
