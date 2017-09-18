@@ -115,11 +115,8 @@ public class ValueReader {
 		Value result;
 		boolean isGlobal = false;
 		input.skip("\\s*");
-		if(input.hasNext("\\:")){
-			result = readGlobalValue(input);
-			isGlobal = true;
-		}
-		else if(input.hasNext("\\.")) result = new CurrentDataContainerValue();
+		if(input.hasNext("\\:")) isGlobal = true;
+		if(input.hasNext("\\.")) result = new CurrentDataContainerValue();
 		else result = readTermWithPossibleArguments(input);
 		Pattern oldDelimiter = input.delimiter();
 		input.useDelimiter("");
@@ -168,8 +165,15 @@ public class ValueReader {
 		if(input.hasNext("\\$")) return readBooleanValue(input);
 		if(input.hasNext("\\{")) return readDataContainer(input);
 		if(input.hasNext("\\<")) return readInterpretedTerm(input);
+		if(input.hasNext("\\%")) return readCurrentEnvironmentTerm(input);
+		if(input.hasNext("\\:")) return readGlobalValue(input);
 		if(input.hasNext()) throw new ReadingException(String.format("Attempting to read a term at \'%s\', but no term found.", input.nextLine()));
 		throw new ReadingException("Attempting to read a term, but encountered the end of the input.");
+	}
+
+	private Value readCurrentEnvironmentTerm(Scanner input) throws ReadingException {
+		readCharacter(input, '%');
+		return new CurrentDataContainerValue();
 	}
 
 	private BooleanValue readBooleanValue(Scanner input) throws ReadingException {
