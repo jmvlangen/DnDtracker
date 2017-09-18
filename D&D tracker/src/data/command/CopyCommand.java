@@ -37,7 +37,7 @@ public class CopyCommand extends CommandValue {
 			}
 			else{
 				Path result = Path.convertToPath(args[1], environment.getPath());
-				result.setValue(original.getValue().copy(), args.length >= 3 ? args[3].evaluate(environment, new Value[0], output).getBool() : true);
+				result.setValue(original.getValue().copy(), args.length >= 3 ? args[2].evaluate(environment, new Value[0], output).getBool() : true);
 				output.printf("Variable \'%s\' copied to \'%s\'.\n",original.getPath(),result);
 			}
 		} catch (DataException|PathException e) {
