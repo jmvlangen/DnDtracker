@@ -1,4 +1,6 @@
 Internal workings:
+    Evaluation should be relative to a path, not to an environment. This should improve templates such that subvariables also profit from the template.
+    Loading text files does not work right now, should look into it. Maybe allow splitting on indented text.
 	Finalize operations on collections. (Should now work, but needs testing!)
 	Programmed in help functions?
 
