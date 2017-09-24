@@ -1,0 +1,31 @@
+Memory:
+character
+	STR
+		_value = score
+		bonus = (score - 10)/2
+		check
+			_template = roll
+			bonus = %..bonus
+roll
+	dieSize = 20
+	_value = 1D(dieSize) + bonus
+	
+test
+	_template = :character
+	STR
+		score = 12
+		
+CommandLine:
+test.STR.check
+
+EvaluationChain:
+1) env = :{} || value = ((%.test).STR).check
+2) env = :{} || value = (test.STR).check
+3) env = :test{} || value = STR.check
+4) env = :test.STR{} || value = check
+5) DataException: No variable 'check' in :test.STR
+
+EvaluationChain (Replace env by a Path):
+1) env = : || value = ((%.test).STR).check (Calls evaluateToFirstPath on (%.test).STR)
+										   (Calls evaluateToFirstPath on %.test) return P(:.test
+										   (Calls evaluateToFirstPath on %) returns P(:)
